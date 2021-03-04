@@ -25,10 +25,13 @@
   (last (string-split str "/"))
   )
 
+(define (remove-newlines str)
+  (string-replace str "\n" "")
+  )
+
 (define (cmd->flat-str command)
-  (string-replace
+  (remove-newlines
    (with-output-to-string (lambda () (system command)))
-   "\n" ""
    )
   )
 
@@ -39,7 +42,8 @@
      [host    (gethostname)]
      [os      (string-titlecase (symbol->string (system-type 'os*)))]
      [kernel  (case os
-                [("Linux") (cmd->flat-str "uname -r")]
+                [("Linux")
+                 (remove-newlines (file->string "/proc/sys/kernel/osrelease"))]
                 [else "N/A"]
                 )
               ]
