@@ -6,6 +6,8 @@
 (require racket/file)
 (require racket/list)
 (require racket/os)
+(require racket/port)
+(require racket/system)
 
 
 ;;; What we need:
@@ -23,12 +25,24 @@
   (last (string-split str "/"))
   )
 
+(define (cmd->flat-str command)
+  (string-replace
+   (with-output-to-string (lambda () (system command)))
+   "\n" ""
+   )
+  )
+
 
 (let*
     (
      [user    (getenv "USER")]
      [host    (gethostname)]
-     [system  (string-titlecase (symbol->string (system-type 'os*)))]
+     [os      (string-titlecase (symbol->string (system-type 'os*)))]
+     [kernel  (case os
+                [("Linux") (cmd->flat-str "uname -r")]
+                [else "N/A"]
+                )
+              ]
      [shell   (string-upcase (basename (getenv "SHELL")))]
      [xinitrc (string-append (getenv "HOME") "/.xinitrc")]
      [desktop (cond
@@ -43,7 +57,8 @@
   (display
    (string-append
     user "@" host       "\n"
-    "OS:      " system  "\n"
+    "OS:      " os      "\n"
+    "KERNEL:  " kernel  "\n"
     "SHELL:   " shell   "\n"
     "DESKTOP: " desktop "\n"
     )
