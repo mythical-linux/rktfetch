@@ -121,6 +121,7 @@
      [cpu     (get-cpu)]
      [distro  (get-distro)]
      [device  (get-device)]
+     [editor  (string-titlecase (getenv "EDITOR"))]
      )
   (display
    (string-append
@@ -131,6 +132,7 @@
     "DISTRO:  " distro  "\n"
     "KERNEL:  " kernel  "\n"
     "SHELL:   " shell   "\n"
+    "EDITOR:  " editor  "\n"
     )
    )
   )

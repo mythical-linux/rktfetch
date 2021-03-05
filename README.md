@@ -41,7 +41,7 @@ SHELL:   BASH
   + ~~then fallback to `/etc/os-release`~~
   + ~~then fallback to `/var/lib/os-release`~~
 - DE/WM (split the current WM output into an array delimited by spaces and take the last element)
-- Editor (get the contents of the `$EDITOR` environmental variable)
+- ~~Editor (get the contents of the `$EDITOR` environmental variable)~~
 - Memory (parse `/proc/meminfo`)
 - Music Info (MPD)
 - Packages
