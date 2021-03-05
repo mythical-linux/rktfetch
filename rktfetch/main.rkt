@@ -51,6 +51,23 @@
     )
   )
 
+(define (get-device)
+  (let (
+        [device-file-list '("/sys/devices/virtual/dmi/id/product_name" "/sys/firmware/devicetree/base/model")]
+        [dev ""])
+    (for ([dl device-file-list]
+          #:when (file-exists? dl))
+      (set! dev 
+        (remove-newlines (file->string dl))
+        ))
+    (if (non-empty-string? dev)
+      dev
+      "N/A (could not read '/sys/devices/virtual/dmi/id/product_name' nor '/sys/firmware/devicetree/base/model')"
+      )
+    )
+  )
+  
+
 (define (get-distro)
   (let
       (
@@ -104,16 +121,17 @@
      [desktop (get-environment xinitrc)]
      [cpu (get-cpu)]
      [distro (get-distro)]
+     [device (get-device)]
      )
   (display
    (string-append
     user "@" host       "\n"
-    "OS:      " os      "\n"
+    "CPU:     " cpu     "\n"
+    "DESKTOP: " desktop "\n"
+    "DEVICE:  " device  "\n"
     "DISTRO:  " distro  "\n"
     "KERNEL:  " kernel  "\n"
     "SHELL:   " shell   "\n"
-    "DESKTOP: " desktop "\n"
-    "CPU:     " cpu     "\n"
     )
    )
   )

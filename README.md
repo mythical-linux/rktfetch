@@ -20,12 +20,12 @@ This is accurate as of the repo having 13 commits.
 `$ racket rktfetch/main.rkt`:
 ```
 valley@gentoo
-OS:      Unix
-KERNEL:  5.10.10-ck-VALLEY
-DISTRO:  Gentoo/Linux
-SHELL:   BASH
-DESKTOP: leftwm
 CPU:     Intel(R) Core(TM) i5-3470 CPU @ 3.20GHz
+DESKTOP: leftwm
+DEVICE:  OptiPlex 7010
+DISTRO:  Gentoo/Linux
+KERNEL:  5.10.10-ck-VALLEY
+SHELL:   BASH
 ```
 
 ## TODO
