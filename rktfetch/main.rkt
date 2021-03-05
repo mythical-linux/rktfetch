@@ -143,32 +143,32 @@
     [("Unix") ( let (
                      [linux-memory-file "/proc/meminfo"]
                      )
-                (cond 
-                  [(file-exists? linux-memory-file) 
-                   (string-append 
-                     (number->string 
-                       (quotient 
-                         (string->number 
-                           (first 
-                             (string-split 
-                               (string-trim 
-                                 (second 
-                                   (string-split 
-                                     (first 
+                (cond
+                  [(file-exists? linux-memory-file)
+                   (string-append
+                     (number->string
+                       (quotient
+                         (string->number
+                           (first
+                             (string-split
+                               (string-trim
+                                 (second
+                                   (string-split
+                                     (first
                                        (file->lines linux-memory-file)
                                        )
                                      ":"
                                      )
-                                   ) 
+                                   )
                                  #:left? #t
-                                 ) 
+                                 )
                                " "
                                )
                              )
-                           ) 
+                           )
                          1024
                          )
-                       ) 
+                       )
                      "MB")]
                   [else "N/A (could not parse /proc/meminfo)"]
                   )
