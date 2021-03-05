@@ -1,14 +1,12 @@
 PACKAGE-NAME		:= $(shell basename $(abspath .))
-EXE-NAME			:= $(PACKAGE-NAME).exe
-
+PACKAGE-EXE			:= $(PACKAGE-NAME).exe
 PACKAGE-ZIP			:= $(PACKAGE-NAME).zip
-PACKAGE-COMPILED	:= $(PACKAGE-NAME)/compiled
 
 RACKET				:= racket
 RACO				:= raco
 
 RUN-FLAGS			:=
-EXE-FLAGS			:= -v -o $(EXE-NAME)
+EXE-FLAGS			:= -v -o $(PACKAGE-EXE)
 DO-DOCS				:= --no-docs
 INSTALL-FLAGS		:= --auto $(DO-DOCS)
 DEPS-FLAGS			:= --check-pkg-deps --unused-pkg-deps
@@ -32,8 +30,8 @@ distclean:
 	if [ -f $(PACKAGE-ZIP) ] ; then rm *.zip* ; fi
 
 clean:	distclean
-	if [ -d $(PACKAGE-COMPILED) ] ; then rm -r $(PACKAGE-COMPILED) ; fi
-	if [ -f $(EXE-NAME) ] ; then rm $(EXE-NAME) ; fi
+	sh -c "find . -type d -name 'compiled' -exec rm -r {} \; ; exit 0"
+	if [ -f $(PACKAGE-EXE) ] ; then rm $(PACKAGE-EXE) ; fi
 
 remove:
 	$(RACO) pkg remove $(DO-DOCS) $(PACKAGE-NAME)
