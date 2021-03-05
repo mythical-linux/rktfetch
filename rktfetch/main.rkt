@@ -17,8 +17,6 @@
 ;; Packages
 ;; Terminal
 ;; Uptime
-;;
-;; Refactor codebase -- functional programming?
 
 ;; Helper functions
 (define (basename str)
