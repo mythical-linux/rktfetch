@@ -12,7 +12,6 @@
 ;;; What we need:
 ;; CPU -- BSD
 ;; Device
-;; Distro
 ;; Kernel -- BSD
 ;; Memory
 ;; Packages
@@ -21,12 +20,9 @@
 ;;
 ;; Refactor codebase -- functional programming?
 
+;; Helper functions
 (define (basename str)
   (last (string-split str "/"))
-  )
-
-(define (remove-newlines str)
-  (string-replace str "\n" "")
   )
 
 (define (cmd->flat-str command)
@@ -35,6 +31,11 @@
    )
   )
 
+(define (remove-newlines str)
+  (string-replace str "\n" "")
+  )
+
+;; Information gathering functions
 (define (get-cpu)
   (let
       (
@@ -71,6 +72,15 @@
     )
   )
 
+(define (get-environment xinitrc)
+  (cond
+    [(getenv "XDG_DESKTOP_SESSION")]
+    [(getenv "XDG_CURRENT_DESKTOP")]
+    [(getenv "DESKTOP_SESSION")]
+    [(file-exists? xinitrc) (last (string-split (last (file->lines xinitrc)) " "))]
+    [else "N/A (could not read the specified env variables, nor could was parsing xinitrc possible"])
+)
+
 (define (get-kernel os)
      (case os
        [("Unix") (let (
@@ -84,15 +94,7 @@
        [else "N/A (could not read '/proc/sys/kernel/osrelease' nor could run 'uname')"])
   )
 
-(define (get-environment xinitrc)
-  (cond
-    [(getenv "XDG_DESKTOP_SESSION")]
-    [(getenv "XDG_CURRENT_DESKTOP")]
-    [(getenv "DESKTOP_SESSION")]
-    [(file-exists? xinitrc) (last (string-split (last (file->lines xinitrc)) " "))]
-    [else "N/A (could not read the specified env variables, nor could was parsing xinitrc possible"])
-)
-
+;; Gather info and output
 (let*
     (
      [user    (getenv "USER")]
