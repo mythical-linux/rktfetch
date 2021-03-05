@@ -3,7 +3,6 @@
 (require racket/file)
 (require racket/list)
 (require racket/string)
-(require "grep.rkt")
 (require "helpers.rkt")
 
 ;; Provide the appropriate functions
