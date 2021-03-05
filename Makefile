@@ -23,6 +23,8 @@ clean:	distclean
 remove:
 	raco pkg remove --no-docs $(PACKAGE-NAME)
 
+purge:	remove clean
+
 setup:
 	raco setup --tidy --avoid-main $(DEPS-FLAGS) --pkgs $(PACKAGE-NAME)
 
