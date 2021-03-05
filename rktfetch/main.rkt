@@ -40,10 +40,9 @@
     (
      [user    (getenv "USER")]
      [host    (gethostname)]
-     [os      (string-titlecase (symbol->string (system-type 'os*)))]
+     [os      (string-titlecase (symbol->string (system-type 'os)))]
      [kernel  (case os
-                [("Linux")
-                 (remove-newlines (file->string "/proc/sys/kernel/osrelease"))]
+                [("Unix") (cmd->flat-str "uname -r")]
                 [else "N/A"]
                 )
               ]
