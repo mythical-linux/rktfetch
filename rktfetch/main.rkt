@@ -7,6 +7,7 @@
 (require racket/os)
 (require racket/port)
 (require racket/system)
+(require "private/grep.rkt")
 
 ;;; What we need:
 ;; CPU -- ARM Linux, BSD
@@ -35,12 +36,21 @@
   )
 
 (define (get_cpu)
-  (let* (
-         [cpu_line (list-ref (file->lines "/proc/cpuinfo") 4)]
-         [info (string-trim (second (string-split cpu_line ":")) #:left? #t)]
-         )
-    info
-  ))
+  (let
+      (
+       [linux-info-file "/proc/cpuinfo"]
+       )
+    (cond
+      [(file-exists? linux-info-file)
+       (string-trim
+        (second (string-split (first (grep "model name" linux-info-file #:first #t)) ":"))
+        #:left? #t
+        )
+       ]
+      [else "N/A"]
+      )
+    )
+  )
 
 (define (get_kernel os kernel_file)
      (case os
