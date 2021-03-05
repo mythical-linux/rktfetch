@@ -45,7 +45,7 @@
      [kernel  (case os
                 [("Unix") (cond
                             [(file-exists? kernel_file) (remove-newlines  (file->string kernel_file))]
-                            [((remove-newlines (cmd->flat-str "uname -r")))]
+                            [(cmd->flat-str "uname -r")]
                             )]
                 [else "N/A"]
                 )
