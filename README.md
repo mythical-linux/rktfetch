@@ -33,9 +33,9 @@ SHELL:   BASH
   + ~~Linux support (generic)~~
   + ~~ARM Linux support~~
   + BSD support
-- Device
-  + read `/sys/devices/virtual/dmi/id/product_name`
-  + then fallback to `/sys/firmware/devicetree/base/model`
+- ~~Device~~
+  + ~~read `/sys/devices/virtual/dmi/id/product_name`~~
+  + ~~then fallback to `/sys/firmware/devicetree/base/model`~~
 - ~~Distro~~
   + ~~parse `/bedrock/etc/os-release`~~
   + ~~then fallback to `/etc/os-release`~~
