@@ -90,7 +90,7 @@
     [(getenv "XDG_CURRENT_DESKTOP")]
     [(getenv "DESKTOP_SESSION")]
     [(file-exists? xinitrc) (last (string-split (last (file->lines xinitrc)) " "))]
-    [else "N/A"])
+    [else "N/A (could not read the specified env variables, nor could was parsing xinitrc possible"])
 )
 
 (let*
