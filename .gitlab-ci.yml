@@ -1,0 +1,22 @@
+---
+
+
+image: debian:stable-slim
+
+
+stages:
+  - test
+
+
+before_script:
+  - apt-get update
+  - apt-get install -y make racket
+
+test:
+  stage: test
+  script:
+    - make run
+    - make install
+    - make setup
+    - make check-deps
+    - make test
