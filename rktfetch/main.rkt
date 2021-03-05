@@ -33,6 +33,24 @@
   (string-replace str "\n" "")
   )
 
+(define (seconds->time-str seconds)
+  (let*
+      (
+       [seconds seconds]
+       [minutes (quotient seconds 60)]
+       [hours   (quotient minutes 60)]
+       [days    (quotient hours 24)]
+       )
+    (string-append
+     "Days: "    (number->string days)    " "
+     "Hours: "   (number->string hours)   " "
+     "Minutes: " (number->string minutes) " "
+     "Seconds: " (number->string seconds)
+     )
+    )
+  )
+
+
 ;; Information gathering functions
 (define (get-cpu)
   (let
@@ -108,6 +126,27 @@
        [else "N/A (could not read '/proc/sys/kernel/osrelease' nor could run 'uname')"])
   )
 
+(define (get-uptime os)
+  (case os
+    [("Unix") (let (
+                    [linux-uptime-file "/proc/uptime"]
+                    )
+                (cond
+                  [(file-exists? linux-uptime-file)
+                   (seconds->time-str
+                    (string->number
+                     (first (string-split (remove-newlines (file->string linux-uptime-file)) "." #:trim? #t))
+                     )
+                    )
+                   ]
+                  [(cmd->flat-str "uptime -p")]
+                  )
+                )
+              ]
+    [else "N/A"]
+    )
+  )
+
 ;; Gather info and output
 (let*
     (
@@ -122,6 +161,7 @@
      [distro  (get-distro)]
      [device  (get-device)]
      [editor  (string-titlecase (getenv "EDITOR"))]
+     [uptime  (get-uptime os)]
      )
   (display
    (string-append
@@ -133,6 +173,7 @@
     "KERNEL:  " kernel  "\n"
     "SHELL:   " shell   "\n"
     "EDITOR:  " editor  "\n"
+    "UPTIME:  " uptime  "\n"
     )
    )
   )
