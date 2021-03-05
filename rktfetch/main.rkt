@@ -16,7 +16,7 @@
 ;; Memory
 ;; Packages
 ;; Terminal
-;; Uptime
+;; Uptime -- BSD
 
 ;; Helper functions
 (define (basename str)
