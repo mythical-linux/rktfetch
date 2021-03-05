@@ -5,9 +5,11 @@
 (require racket/string)
 (require racket/system)
 
-(provide basename)
-(provide cmd->flat-str)
-(provide remove-newlines)
+(provide
+ basename
+ cmd->flat-str
+ remove-newlines
+ )
 
 ;; Helper functions
 (define (basename str)

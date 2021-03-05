@@ -7,15 +7,17 @@
 (require "helpers.rkt")
 
 ;; Provide the appropriate functions
-(provide get-cpu)
-(provide get-distro)
-(provide get-environment)
-(provide get-device)
-(provide get-distro)
-(provide get-editor)
-(provide get-kernel)
-(provide get-memory)
-(provide get-uptime)
+(provide
+ get-cpu
+ get-distro
+ get-environment
+ get-device
+ get-distro
+ get-editor
+ get-kernel
+ get-memory
+ get-uptime
+ )
 
 ;; Information gathering functions
 (define (get-cpu)
@@ -106,32 +108,32 @@
     [("Unix") ( let (
                      [linux-memory-file "/proc/meminfo"]
                      )
-                (cond 
-                  [(file-exists? linux-memory-file) 
-                   (string-append 
-                     (number->string 
-                       (quotient 
-                         (string->number 
-                           (first 
-                             (string-split 
-                               (string-trim 
-                                 (second 
-                                   (string-split 
-                                     (first 
+                (cond
+                  [(file-exists? linux-memory-file)
+                   (string-append
+                     (number->string
+                       (quotient
+                         (string->number
+                           (first
+                             (string-split
+                               (string-trim
+                                 (second
+                                   (string-split
+                                     (first
                                        (file->lines linux-memory-file)
                                        )
                                      ":"
                                      )
-                                   ) 
+                                   )
                                  #:left? #t
-                                 ) 
+                                 )
                                " "
                                )
                              )
-                           ) 
+                           )
                          1024
                          )
-                       ) 
+                       )
                      "MB")]
                   [else "N/A (could not parse /proc/meminfo)"]
                   )

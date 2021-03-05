@@ -1,9 +1,7 @@
 #lang racket/base
 
 ;; (require racket/cmdline)
-(require racket/string)
 (require racket/os)
-(require "private/grep.rkt")
 (require "private/get.rkt")
 (require "private/helpers.rkt")
 
