@@ -9,6 +9,8 @@ RACO				:= raco
 
 RUN-FLAGS			:=
 EXE-FLAGS			:= -v -o $(EXE-NAME)
+DO-DOCS				:= --no-docs
+INSTALL-FLAGS		:= --auto $(DO-DOCS)
 DEPS-FLAGS			:= --check-pkg-deps --unused-pkg-deps
 
 
@@ -21,7 +23,7 @@ exe:
 	$(RACO) exe $(EXE-FLAGS) $(PACKAGE-NAME)/main.rkt
 
 install:
-	$(RACO) pkg install --auto --no-docs --name $(PACKAGE-NAME)
+	$(RACO) pkg install $(INSTALL-FLAGS) --name $(PACKAGE-NAME)
 
 dist:
 	$(RACO) pkg create --source $(PWD)
@@ -34,7 +36,7 @@ clean:	distclean
 	if [ -f $(EXE-NAME) ] ; then rm $(EXE-NAME) ; fi
 
 remove:
-	$(RACO) pkg remove --no-docs $(PACKAGE-NAME)
+	$(RACO) pkg remove $(DO-DOCS) $(PACKAGE-NAME)
 
 purge:	remove clean
 
@@ -42,7 +44,7 @@ setup:
 	$(RACO) setup --tidy --avoid-main $(DEPS-FLAGS) --pkgs $(PACKAGE-NAME)
 
 check-deps:
-	$(RACO) setup --no-docs $(DEPS-FLAGS) $(PACKAGE-NAME)
+	$(RACO) setup $(DO-DOCS) $(DEPS-FLAGS) $(PACKAGE-NAME)
 
 test:
 	$(RACO) test --package $(PACKAGE-NAME)
