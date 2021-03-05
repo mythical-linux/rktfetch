@@ -57,7 +57,7 @@
         [dev ""])
     (for ([dl device-file-list]
           #:when (file-exists? dl))
-      (set! dev 
+      (set! dev
         (remove-newlines (file->string dl))
         ))
     (if (non-empty-string? dev)
@@ -118,9 +118,9 @@
      [shell   (string-upcase (basename (getenv "SHELL")))]
      [xinitrc (string-append (getenv "HOME") "/.xinitrc")]
      [desktop (get-environment xinitrc)]
-     [cpu (get-cpu)]
-     [distro (get-distro)]
-     [device (get-device)]
+     [cpu     (get-cpu)]
+     [distro  (get-distro)]
+     [device  (get-device)]
      )
   (display
    (string-append
