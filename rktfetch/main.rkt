@@ -22,33 +22,35 @@
 
 (define (basename str)
   (last (string-split str "/"))
-  )
+)
 
 (define (remove-newlines str)
   (string-replace str "\n" "")
-  )
+)
 
 (define (cmd->flat-str command)
   (remove-newlines
    (with-output-to-string (lambda () (system command)))
-   )
   )
+ )
 
 (define (get_cpu)
   (let* (
-         [cpu_line (list-ref (file->lines "/proc/cpuinfo") 4)]
-         [info (string-trim (second (string-split cpu_line ":")) #:left? #t)]
-         )
+    [cpu_line (list-ref (file->lines "/proc/cpuinfo") 4)]
+      [info (string-trim (second (string-split cpu_line ":")) #:left? #t)]
+      )
     info
-  ))
+  )
+)
 
 (define (get_kernel os kernel_file)
-     (case os
-       [("Unix") (cond
-                   [(file-exists? kernel_file) (remove-newlines  (file->string kernel_file))]
-                   [(cmd->flat-str "uname -r")])]
-       [else "N/A"])
+  (case os
+    [("Unix") (cond
+      [(file-exists? kernel_file) (remove-newlines  (file->string kernel_file))]
+      [(cmd->flat-str "uname -r")])]
+    [else "N/A"]
   )
+)
 
 (define (get_environment xinitrc)
   (cond
@@ -56,29 +58,30 @@
     [(getenv "XDG_CURRENT_DESKTOP")]
     [(getenv "DESKTOP_SESSION")]
     [(file-exists? xinitrc) (last (string-split (last (file->lines xinitrc)) " "))]
-    [else "N/A"])
+    [else "N/A"]
+  )
 )
 
 (let*
-    (
-     [user    (getenv "USER")]
-     [host    (gethostname)]
-     [os      (string-titlecase (symbol->string (system-type 'os)))]
-     [kernel_file "/proc/sys/kernel/osrelease"]
-     [kernel  (get_kernel os kernel_file)]
-     [shell   (string-upcase (basename (getenv "SHELL")))]
-     [xinitrc (string-append (getenv "HOME") "/.xinitrc")]
-     [desktop (get_environment xinitrc)]
-     [cpu (get_cpu)]
-     )
+  (
+    [user    (getenv "USER")]
+    [host    (gethostname)]
+    [os      (string-titlecase (symbol->string (system-type 'os)))]
+    [kernel_file "/proc/sys/kernel/osrelease"]
+    [kernel  (get_kernel os kernel_file)]
+    [shell   (string-upcase (basename (getenv "SHELL")))]
+    [xinitrc (string-append (getenv "HOME") "/.xinitrc")]
+    [desktop (get_environment xinitrc)]
+    [cpu (get_cpu)]
+  )
   (display
    (string-append
-    user "@" host       "\n"
-    "OS:      " os      "\n"
-    "KERNEL:  " kernel  "\n"
-    "SHELL:   " shell   "\n"
-    "DESKTOP: " desktop "\n"
-    "CPU:     " cpu     "\n"
+     user "@" host       "\n"
+     "OS:      " os      "\n"
+     "KERNEL:  " kernel  "\n"
+     "SHELL:   " shell   "\n"
+     "DESKTOP: " desktop "\n"
+     "CPU:     " cpu     "\n"
     )
-   )
   )
+)
