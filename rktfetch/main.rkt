@@ -65,7 +65,7 @@
                 [(getenv "XDG_DESKTOP_SESSION")]
                 [(getenv "XDG_CURRENT_DESKTOP")]
                 [(getenv "DESKTOP_SESSION")]
-                [(file-exists? xinitrc) (last (file->lines xinitrc))]
+                [(file-exists? xinitrc) (last (string-split (last (file->lines xinitrc)) " "))]
                 [else "N/A"]
                 )
               ]
