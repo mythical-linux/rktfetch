@@ -24,10 +24,14 @@ OS:      Unix
 KERNEL:  5.10.10-ck-VALLEY
 SHELL:   BASH
 DESKTOP: exec dbus-launch --sh-syntax --exit-with-session leftwm
+CPU:      Intel(R) Core(TM) i5-3470 CPU @ 3.20GHz
 ```
 
 ## TODO
 - CPU (parse `/proc/cpuinfo`)
+  + ~~Linux support (generic)~~
+  + ARM Linux support
+  + BSD support
 - Device 
   + read `/sys/devices/virtual/dmi/id/product_name`
   + then fallback to `/sys/firmware/devicetree/base/model`

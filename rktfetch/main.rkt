@@ -36,6 +36,15 @@
   )
 
 
+(define (get_cpu)
+  (let* [
+         (cpu_line (list-ref (file->lines "/proc/cpuinfo") 4))
+         (info (string-trim (second (string-split cpu_line ":")) #:left? #t))
+         ]
+    info
+  ))
+
+
 (let*
     (
      [user    (getenv "USER")]
@@ -60,6 +69,7 @@
                 [else "N/A"]
                 )
               ]
+     [cpu (get_cpu)]
      )
   (display
    (string-append
@@ -68,6 +78,7 @@
     "KERNEL:  " kernel  "\n"
     "SHELL:   " shell   "\n"
     "DESKTOP: " desktop "\n"
+    "CPU:     " cpu     "\n"
     )
    )
   )
