@@ -66,7 +66,6 @@
       )
     )
   )
-  
 
 (define (get-distro)
   (let
