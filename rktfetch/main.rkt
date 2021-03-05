@@ -42,20 +42,21 @@
     info
   ))
 
+(define (get_kernel os kernel_file)
+     (case os
+       [("Unix") (cond
+                   [(file-exists? kernel_file) (remove-newlines  (file->string kernel_file))]
+                   [(cmd->flat-str "uname -r")])]
+       [else "N/A"])
+  )
+
 (let*
     (
      [user    (getenv "USER")]
      [host    (gethostname)]
      [os      (string-titlecase (symbol->string (system-type 'os)))]
      [kernel_file "/proc/sys/kernel/osrelease"]
-     [kernel  (case os
-                [("Unix") (cond
-                            [(file-exists? kernel_file) (remove-newlines  (file->string kernel_file))]
-                            [(cmd->flat-str "uname -r")]
-                            )]
-                [else "N/A"]
-                )
-              ]
+     [kernel  (get_kernel os kernel_file)]
      [shell   (string-upcase (basename (getenv "SHELL")))]
      [xinitrc (string-append (getenv "HOME") "/.xinitrc")]
      [desktop (cond
