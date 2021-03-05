@@ -36,20 +36,20 @@
 (define (seconds->time-str seconds)
   (let*
       (
-       [seconds seconds]
        [minutes (modulo (quotient seconds 60) 60)]
        [hours   (modulo (quotient seconds (* 60 60)) 24)]
        [days            (quotient seconds (* 60 60 24))]
        )
-    (string-append
-     (number->string days)    "d" " "
-     (number->string hours)   "h" " "
-     (number->string minutes) "m" " "
-     (if (eq? 0 '(days hours minutes))
-       '((number->string seconds) "s")
-       ""
-       )
-     )
+    (if (= 0 days hours minutes)
+        (string-append
+         (number->string seconds) "s"
+         )
+        (string-append
+         (number->string days)    "d" " "
+         (number->string hours)   "h" " "
+         (number->string minutes) "m" " "
+         )
+        )
     )
   )
 
