@@ -37,9 +37,9 @@
   (let*
       (
        [seconds seconds]
-       [minutes (quotient seconds 60)]
-       [hours   (quotient minutes 60)]
-       [days    (quotient hours 24)]
+       [minutes (modulo (quotient seconds 60) 60)]
+       [hours   (modulo (quotient seconds (* 60 60)) 24)]
+       [days            (quotient seconds (* 60 60 24))]
        )
     (string-append
      "Days: "    (number->string days)    " "
