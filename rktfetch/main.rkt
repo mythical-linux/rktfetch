@@ -11,14 +11,16 @@
 
 
 ;;; What we need:
-;; USER @ HOST
-;; CPU
-;; OS
-;; KERNEL ( Win/NT / Linux running / Mach? )
-;; Uptime
+;; CPU -- ARM Linux, BSD
+;; Device
+;; Distro
+;; Kernel -- BSD
+;; Memory
 ;; Packages
-;; SHELL
-;; DE/WM ?
+;; Terminal
+;; Uptime
+;;
+;; Refactor codebase -- functional programming?
 
 
 (define (basename str)
@@ -37,10 +39,10 @@
 
 
 (define (get_cpu)
-  (let* [
-         (cpu_line (list-ref (file->lines "/proc/cpuinfo") 4))
-         (info (string-trim (second (string-split cpu_line ":")) #:left? #t))
-         ]
+  (let* (
+         [cpu_line (list-ref (file->lines "/proc/cpuinfo") 4)]
+         [info (string-trim (second (string-split cpu_line ":")) #:left? #t)]
+         )
     info
   ))
 
