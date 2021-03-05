@@ -40,6 +40,8 @@ remove:
 
 purge:	remove clean
 
+reinstall:	remove install
+
 setup:
 	$(RACO) setup --tidy --avoid-main $(DEPS-FLAGS) --pkgs $(PACKAGE-NAME)
 
