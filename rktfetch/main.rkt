@@ -132,9 +132,23 @@
                    (cond
                        [(file-exists? linux-kernel-file) (remove-newlines  (file->string linux-kernel-file))]
                        [(cmd->flat-str "uname -r")]
+                       [else "N/A (could not read '/proc/sys/kernel/osrelease' nor could run 'uname')"]
                        )
                    )]
-       [else "N/A (could not read '/proc/sys/kernel/osrelease' nor could run 'uname')"])
+       [else "N/A (your OS isn't supported)"])
+  )
+
+(define (get-memory os)
+  (case os
+    [("Unix") ( let (
+                     [linux-memory-file "/proc/meminfo"]
+                     )
+                (cond 
+                  [(file-exists? linux-memory-file) (string-append (number->string (quotient (string->number (first (string-split (string-trim (second (string-split (first (file->lines linux-memory-file)) ":")) #:left? #t) " "))) 1024)) "MB")]
+                  [else "N/A (could not parse /proc/meminfo)"]
+                  )
+                )]
+    [else "N/A (your OS isn't supported)"])
   )
 
 (define (get-uptime os)
@@ -171,6 +185,7 @@
      [editor  (get-editor)]
      [os      (string-titlecase (symbol->string (system-type 'os)))]
      [kernel  (get-kernel os)]
+     [memory  (get-memory os)]
      [shell   (string-upcase (basename (getenv "SHELL")))]
      [uptime  (get-uptime os)]
      )
@@ -183,6 +198,7 @@
     "DISTRO:  " distro  "\n"
     "EDITOR:  " editor  "\n"
     "KERNEL:  " kernel  "\n"
+    "MEMORY:  " memory  "\n"
     "SHELL:   " shell   "\n"
     "UPTIME:  " uptime  "\n"
     )

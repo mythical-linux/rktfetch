@@ -24,8 +24,11 @@ CPU:     Intel(R) Core(TM) i5-3470 CPU @ 3.20GHz
 DESKTOP: leftwm
 DEVICE:  OptiPlex 7010
 DISTRO:  Gentoo/Linux
+EDITOR:  Vim
 KERNEL:  5.10.10-ck-VALLEY
+MEMORY:  15966MB
 SHELL:   BASH
+UPTIME:  2d 8h 8m
 ```
 
 ## TODO
@@ -43,6 +46,9 @@ SHELL:   BASH
 - DE/WM (split the current WM output into an array delimited by spaces and take the last element)
 - ~~Editor (get the contents of the `$EDITOR` environmental variable)~~
 - Memory (parse `/proc/meminfo`)
+  + Used/Total
+  + ~~Linux support~~
+  + BSD support
 - Music Info (MPD)
 - Packages
   + apk
@@ -60,3 +66,5 @@ SHELL:   BASH
   + use it to find the PPID, parse the status of that
   + repeat until terminal found while applying exceptions where necessary
 - Uptime (parse `/proc/uptime`)
+  + ~~Linux support~~
+  + BSD support
