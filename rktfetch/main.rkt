@@ -42,10 +42,13 @@
        [days            (quotient seconds (* 60 60 24))]
        )
     (string-append
-     "Days: "    (number->string days)    " "
-     "Hours: "   (number->string hours)   " "
-     "Minutes: " (number->string minutes) " "
-     "Seconds: " (number->string seconds)
+     (number->string days)    "d" " "
+     (number->string hours)   "h" " "
+     (number->string minutes) "m" " "
+     (if (eq? 0 '(days hours minutes))
+       '((number->string seconds) "s")
+       ""
+       )
      )
     )
   )
@@ -104,6 +107,14 @@
     )
   )
 
+(define (get-editor)
+  (let ((editor-string (getenv "EDITOR")))
+    (if (string-contains? editor-string "/")
+      (string-titlecase (basename editor-string))
+      (string-titlecase editor-string))
+    )
+  )
+
 (define (get-environment xinitrc)
   (cond
     [(getenv "XDG_DESKTOP_SESSION")]
@@ -152,15 +163,15 @@
     (
      [user    (getenv "USER")]
      [host    (gethostname)]
+     [cpu     (get-cpu)]
+     [distro  (get-distro)]
+     [xinitrc (string-append (getenv "HOME") "/.xinitrc")]
+     [desktop (get-environment xinitrc)]
+     [device  (get-device)]
+     [editor  (get-editor)]
      [os      (string-titlecase (symbol->string (system-type 'os)))]
      [kernel  (get-kernel os)]
      [shell   (string-upcase (basename (getenv "SHELL")))]
-     [xinitrc (string-append (getenv "HOME") "/.xinitrc")]
-     [desktop (get-environment xinitrc)]
-     [cpu     (get-cpu)]
-     [distro  (get-distro)]
-     [device  (get-device)]
-     [editor  (string-titlecase (getenv "EDITOR"))]
      [uptime  (get-uptime os)]
      )
   (display
@@ -170,9 +181,9 @@
     "DESKTOP: " desktop "\n"
     "DEVICE:  " device  "\n"
     "DISTRO:  " distro  "\n"
+    "EDITOR:  " editor  "\n"
     "KERNEL:  " kernel  "\n"
     "SHELL:   " shell   "\n"
-    "EDITOR:  " editor  "\n"
     "UPTIME:  " uptime  "\n"
     )
    )
