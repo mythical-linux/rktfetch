@@ -30,18 +30,18 @@ CPU:     Intel(R) Core(TM) i5-3470 CPU @ 3.20GHz
 ## TODO
 - CPU (parse `/proc/cpuinfo`)
   + ~~Linux support (generic)~~
-  + ARM Linux support
+  + ~~ARM Linux support~~
   + BSD support
-- Device 
+- Device
   + read `/sys/devices/virtual/dmi/id/product_name`
   + then fallback to `/sys/firmware/devicetree/base/model`
-- Distro 
+- Distro
   + parse `/bedrock/etc/os-release`
   + then fallback to `/etc/os-release`
   + then fallback to `/var/lib/os-release`
 - DE/WM (split the current WM output into an array delimited by spaces and take the last element)
 - Editor (get the contents of the `$EDITOR` environmental variable)
-- Hostname 
+- Hostname
   + read `/etc/hostname`
   + then fallback to `hostname`
 - Memory (parse `/proc/meminfo`)
@@ -57,7 +57,7 @@ CPU:     Intel(R) Core(TM) i5-3470 CPU @ 3.20GHz
   + xbps
   + yum
   + zypper
-- Terminal 
+- Terminal
   + parse the `/proc/?/status` of the current PID
   + use it to find the PPID, parse the status of that
   + repeat until terminal found while applying exceptions where necessary
