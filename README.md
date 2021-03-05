@@ -4,6 +4,16 @@ rktfetch is an info fetch tool (like neofetch) but written in Racket.
 ## Usage
 After you've installed racket, just run `racket rktfetch/main.rkt`.
 
+There is also a Makefile, which contains the following targets:
+- `run` (runs the program)
+- `exe` (compiles an executable)
+- `install` (install the program)
+- `dist` (create a package for the program)
+- `distclean` (remove the created package)
+- `clean` (remove any compiles files and created packages)
+- `remove` (removes the installed package)
+- `purge` (run the `remove` and `clean` targets)
+
 ## Output
 This is accurate as of the repo having 13 commits.
 
