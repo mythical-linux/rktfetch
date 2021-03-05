@@ -10,7 +10,7 @@
 (require "private/grep.rkt")
 
 ;;; What we need:
-;; CPU -- ARM Linux, BSD
+;; CPU -- BSD
 ;; Device
 ;; Distro
 ;; Kernel -- BSD
@@ -47,8 +47,27 @@
         #:left? #t
         )
        ]
-      [else "N/A"]
+      [else "N/A (could not read /proc/cpuinfo)"]
       )
+    )
+  )
+
+(define (get-distro)
+  (let
+      (
+       [os-release-list '("/bedrock/etc/os-release" "/etc/os-release" "/var/lib/os-release")]
+       [dist ""]
+       )
+    (for ([l os-release-list]
+          #:when (file-exists? l))
+      (set! dist
+            (string-replace (string-trim (second (string-split (first (grep "PRETTY_NAME" l #:first #t)) "="))) "\"" "")
+            )
+      )
+    (if (non-empty-string? dist)
+        dist
+        "N/A (could not read '/bedrock/etc/os-release', '/etc/os-release', nor '/var/lib/os-release')"
+        )
     )
   )
 
@@ -62,7 +81,7 @@
                        [(cmd->flat-str "uname -r")]
                        )
                    )]
-       [else "N/A"])
+       [else "N/A (could not read '/proc/sys/kernel/osrelease' nor could run 'uname')"])
   )
 
 (define (get-environment xinitrc)
@@ -84,11 +103,13 @@
      [xinitrc (string-append (getenv "HOME") "/.xinitrc")]
      [desktop (get-environment xinitrc)]
      [cpu (get-cpu)]
+     [distro (get-distro)]
      )
   (display
    (string-append
     user "@" host       "\n"
     "OS:      " os      "\n"
+    "DISTRO:  " distro  "\n"
     "KERNEL:  " kernel  "\n"
     "SHELL:   " shell   "\n"
     "DESKTOP: " desktop "\n"

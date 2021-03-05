@@ -22,6 +22,7 @@ This is accurate as of the repo having 13 commits.
 valley@gentoo
 OS:      Unix
 KERNEL:  5.10.10-ck-VALLEY
+DISTRO:  Gentoo/Linux
 SHELL:   BASH
 DESKTOP: leftwm
 CPU:     Intel(R) Core(TM) i5-3470 CPU @ 3.20GHz
@@ -35,15 +36,12 @@ CPU:     Intel(R) Core(TM) i5-3470 CPU @ 3.20GHz
 - Device
   + read `/sys/devices/virtual/dmi/id/product_name`
   + then fallback to `/sys/firmware/devicetree/base/model`
-- Distro
-  + parse `/bedrock/etc/os-release`
-  + then fallback to `/etc/os-release`
-  + then fallback to `/var/lib/os-release`
+- ~~Distro~~
+  + ~~parse `/bedrock/etc/os-release`~~
+  + ~~then fallback to `/etc/os-release`~~
+  + ~~then fallback to `/var/lib/os-release`~~
 - DE/WM (split the current WM output into an array delimited by spaces and take the last element)
 - Editor (get the contents of the `$EDITOR` environmental variable)
-- Hostname
-  + read `/etc/hostname`
-  + then fallback to `hostname`
 - Memory (parse `/proc/meminfo`)
 - Music Info (MPD)
 - Packages
