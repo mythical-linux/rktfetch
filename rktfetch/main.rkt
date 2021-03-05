@@ -35,7 +35,7 @@
    )
   )
 
-(define (get_cpu)
+(define (get-cpu)
   (let
       (
        [linux-info-file "/proc/cpuinfo"]
@@ -52,15 +52,20 @@
     )
   )
 
-(define (get_kernel os kernel_file)
+(define (get-kernel os)
      (case os
-       [("Unix") (cond
-                   [(file-exists? kernel_file) (remove-newlines  (file->string kernel_file))]
-                   [(cmd->flat-str "uname -r")])]
+       [("Unix") (let (
+                       [linux-kernel-file "/proc/sys/kernel/osrelease"]
+                       )
+                   (cond
+                       [(file-exists? linux-kernel-file) (remove-newlines  (file->string linux-kernel-file))]
+                       [(cmd->flat-str "uname -r")]
+                       )
+                   )]
        [else "N/A"])
   )
 
-(define (get_environment xinitrc)
+(define (get-environment xinitrc)
   (cond
     [(getenv "XDG_DESKTOP_SESSION")]
     [(getenv "XDG_CURRENT_DESKTOP")]
@@ -74,12 +79,11 @@
      [user    (getenv "USER")]
      [host    (gethostname)]
      [os      (string-titlecase (symbol->string (system-type 'os)))]
-     [kernel_file "/proc/sys/kernel/osrelease"]
-     [kernel  (get_kernel os kernel_file)]
+     [kernel  (get-kernel os)]
      [shell   (string-upcase (basename (getenv "SHELL")))]
      [xinitrc (string-append (getenv "HOME") "/.xinitrc")]
-     [desktop (get_environment xinitrc)]
-     [cpu (get_cpu)]
+     [desktop (get-environment xinitrc)]
+     [cpu (get-cpu)]
      )
   (display
    (string-append
