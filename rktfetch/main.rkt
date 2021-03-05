@@ -41,8 +41,12 @@
      [user    (getenv "USER")]
      [host    (gethostname)]
      [os      (string-titlecase (symbol->string (system-type 'os)))]
+     [kernel_file "/proc/sys/kernel/osrelease"]
      [kernel  (case os
-                [("Unix") (cmd->flat-str "uname -r")]
+                [("Unix") (cond
+                            [(file-exists? kernel_file) (remove-newlines  (file->string kernel_file))]
+                            [((remove-newlines (cmd->flat-str "uname -r")))]
+                            )]
                 [else "N/A"]
                 )
               ]
