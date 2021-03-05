@@ -1,6 +1,5 @@
 #lang racket/base
 
-
 ;; (require racket/cmdline)
 (require racket/string)
 (require racket/file)
@@ -8,7 +7,6 @@
 (require racket/os)
 (require racket/port)
 (require racket/system)
-
 
 ;;; What we need:
 ;; CPU -- ARM Linux, BSD
@@ -21,7 +19,6 @@
 ;; Uptime
 ;;
 ;; Refactor codebase -- functional programming?
-
 
 (define (basename str)
   (last (string-split str "/"))
@@ -37,7 +34,6 @@
    )
   )
 
-
 (define (get_cpu)
   (let* (
          [cpu_line (list-ref (file->lines "/proc/cpuinfo") 4)]
@@ -45,7 +41,6 @@
          )
     info
   ))
-
 
 (let*
     (
