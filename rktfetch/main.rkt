@@ -37,8 +37,8 @@
 (define (get_cpu)
   (let* (
     [cpu_line (list-ref (file->lines "/proc/cpuinfo") 4)]
-      [info (string-trim (second (string-split cpu_line ":")) #:left? #t)]
-      )
+    [info (string-trim (second (string-split cpu_line ":")) #:left? #t)]
+    )
     info
   )
 )
