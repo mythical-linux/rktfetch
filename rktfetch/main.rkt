@@ -50,6 +50,15 @@
        [else "N/A"])
   )
 
+(define (get_environment xinitrc)
+  (cond
+    [(getenv "XDG_DESKTOP_SESSION")]
+    [(getenv "XDG_CURRENT_DESKTOP")]
+    [(getenv "DESKTOP_SESSION")]
+    [(file-exists? xinitrc) (last (string-split (last (file->lines xinitrc)) " "))]
+    [else "N/A"])
+)
+
 (let*
     (
      [user    (getenv "USER")]
@@ -59,14 +68,7 @@
      [kernel  (get_kernel os kernel_file)]
      [shell   (string-upcase (basename (getenv "SHELL")))]
      [xinitrc (string-append (getenv "HOME") "/.xinitrc")]
-     [desktop (cond
-                [(getenv "XDG_DESKTOP_SESSION")]
-                [(getenv "XDG_CURRENT_DESKTOP")]
-                [(getenv "DESKTOP_SESSION")]
-                [(file-exists? xinitrc) (last (string-split (last (file->lines xinitrc)) " "))]
-                [else "N/A"]
-                )
-              ]
+     [desktop (get_environment xinitrc)]
      [cpu (get_cpu)]
      )
   (display
