@@ -96,8 +96,7 @@
 (define (get-environment)
   (let*
       (
-       [xinitrc (if (getenv "XINITRC")
-                    (getenv "XINITRC")
+       [xinitrc (or (getenv "XINITRC")
                     (if (getenv "HOME")
                         (string-append (getenv "HOME") "/.xinitrc")
                         "/root/.xinitrc"
