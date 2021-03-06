@@ -1,7 +1,7 @@
 ---
 
 
-image: debian:stable-slim
+image: debian:testing-20210208
 
 
 stages:
