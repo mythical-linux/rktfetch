@@ -5,6 +5,7 @@ PACKAGE-ZIP			:= $(PACKAGE-NAME).zip
 RACKET				:= racket
 RACO				:= raco
 
+ENTRYPOINT			:= $(PACKAGE-NAME)/main.rkt
 RUN-FLAGS			:=
 EXE-FLAGS			:= -v -o $(PACKAGE-EXE)
 DO-DOCS				:= --no-docs
@@ -15,10 +16,10 @@ DEPS-FLAGS			:= --check-pkg-deps --unused-pkg-deps
 all:	install setup test
 
 run:
-	$(RACKET) $(RUN-FLAGS) $(PACKAGE-NAME)/main.rkt
+	$(RACKET) $(RUN-FLAGS) $(ENTRYPOINT)
 
 exe:
-	$(RACO) exe $(EXE-FLAGS) $(PACKAGE-NAME)/main.rkt
+	$(RACO) exe $(EXE-FLAGS) $(ENTRYPOINT)
 
 install:
 	$(RACO) pkg install $(INSTALL-FLAGS) --name $(PACKAGE-NAME)
