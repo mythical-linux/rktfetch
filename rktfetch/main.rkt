@@ -28,7 +28,7 @@
      [os      (string-titlecase (symbol->string (system-type 'os)))]
      [kernel  (get-kernel os)]
      [memory  (get-memory os)]
-     [shell   (string-upcase (basename (getenv "SHELL")))]
+     [shell   (get-shell)]
      [uptime  (get-uptime os)]
      )
   (display

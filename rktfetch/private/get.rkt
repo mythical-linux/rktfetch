@@ -8,13 +8,14 @@
 ;; Provide the appropriate functions
 (provide
  get-cpu
- get-distro
- get-environment
  get-device
  get-distro
+ get-distro
  get-editor
+ get-environment
  get-kernel
  get-memory
+ get-shell
  get-uptime
  )
 
@@ -172,6 +173,13 @@
          )
         )
     )
+  )
+
+(define (get-shell)
+  (if (getenv "SHELL")
+      (string-upcase (basename (getenv "SHELL")))
+      "N/A (shell not set)"
+      )
   )
 
 (define (get-uptime os)
