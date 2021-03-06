@@ -93,14 +93,26 @@
     )
   )
 
-(define (get-environment xinitrc)
-  (cond
-    [(getenv "XDG_DESKTOP_SESSION")]
-    [(getenv "XDG_CURRENT_DESKTOP")]
-    [(getenv "DESKTOP_SESSION")]
-    [(file-exists? xinitrc) (last (string-split (last (file->lines xinitrc)) " "))]
-    [else "N/A (could not read the specified env variables, nor could was parsing xinitrc possible"])
-)
+(define (get-environment)
+  (let*
+      (
+       [xinitrc (if (getenv "XINITRC")
+                    (getenv "XINITRC")
+                    (if (getenv "HOME")
+                        (string-append (getenv "HOME") "/.xinitrc")
+                        "/root/.xinitrc"
+                        )
+                    )]
+       [xinitrc-exists (file-exists? xinitrc)]
+       )
+    (cond
+      [(getenv "XDG_DESKTOP_SESSION")]
+      [(getenv "XDG_CURRENT_DESKTOP")]
+      [(getenv "DESKTOP_SESSION")]
+      [xinitrc-exists (last (string-split (last (file->lines xinitrc)) " "))]
+      [else "N/A (could not read the specified env variables, nor could was parsing xinitrc possible"])
+    )
+  )
 
 (define (get-kernel os)
      (case os
