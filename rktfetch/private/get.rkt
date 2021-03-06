@@ -72,10 +72,16 @@
   )
 
 (define (get-editor)
-  (let ((editor-string (getenv "EDITOR")))
+  (let* (
+         [editor-string (if (getenv "EDITOR")
+                            (getenv "EDITOR")
+                            "none"
+                            )
+                        ]
+         )
     (if (string-contains? editor-string "/")
-      (string-titlecase (basename editor-string))
-      (string-titlecase editor-string))
+        (string-titlecase (basename editor-string))
+        (string-titlecase editor-string))
     )
   )
 
