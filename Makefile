@@ -30,7 +30,7 @@ distclean:
 	if [ -f $(PACKAGE-ZIP) ] ; then rm *.zip* ; fi
 
 clean:	distclean
-	sh -c "find . -type d -name 'compiled' -exec rm -r {} \; ; exit 0"
+	find . -depth -type d -name 'compiled' -exec rm -r {} \;
 	if [ -f $(PACKAGE-EXE) ] ; then rm $(PACKAGE-EXE) ; fi
 
 remove:
