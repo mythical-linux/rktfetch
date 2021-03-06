@@ -27,14 +27,14 @@
     (cond
       [(file-exists? linux-info-file)
        (let*
-           ([model-name (grep "model name" linux-info-file #:first #t)])
+           ([model-name (grep-first->str "model name" linux-info-file)])
          (cond
-           [(empty? model-name) "N/A (/proc/cpuinfo doesn't provide required information)"]
-           [else (string-trim
-                  (second (string-split (first model-name) ":"))
-                  #:left? #t
-                  )
-                 ]
+           [(non-empty-string? model-name) (string-trim
+                                            (second (string-split model-name ":"))
+                                            #:left? #t
+                                            )
+                                           ]
+           [else "N/A (/proc/cpuinfo doesn't provide required information)"]
            )
          )
        ]
