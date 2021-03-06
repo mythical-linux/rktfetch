@@ -79,7 +79,7 @@
                             )
                         ]
          )
-    (if (string-contains? editor-string "/")
+    (if (string-prefix? editor-string "/")
         (string-titlecase (basename editor-string))
         (string-titlecase editor-string))
     )
