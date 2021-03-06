@@ -10,6 +10,7 @@
  basename
  cmd->flat-str
  grep
+ grep-first->str
  remove-newlines
  )
 
@@ -47,5 +48,15 @@
         )
       )
     out
+    )
+  )
+
+(define (grep-first->str str file-name)
+  (let*
+      ([grep-list (grep str file-name #:first #t)])
+    (if (empty? grep-list)
+        ""
+        (first grep-list)
+        )
     )
   )

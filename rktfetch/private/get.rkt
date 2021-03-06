@@ -68,7 +68,7 @@
     (for ([l os-release-list]
           #:when (file-exists? l))
       (set! dist
-            (string-replace (string-trim (second (string-split (first (grep "PRETTY_NAME" l #:first #t)) "="))) "\"" "")
+            (string-replace (string-replace (grep-first->str "PRETTY_NAME=" l) "PRETTY_NAME=" "") "\"" "")
             )
       )
     (if (non-empty-string? dist)
