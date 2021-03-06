@@ -117,39 +117,40 @@
 
 (define (get-memory os)
   (case os
-    [("Unix") ( let (
-                     [linux-memory-file "/proc/meminfo"]
-                     )
-                (cond
-                  [(file-exists? linux-memory-file)
-                   (string-append
-                     (number->string
-                       (quotient
-                         (string->number
-                           (first
-                             (string-split
-                               (string-trim
-                                 (second
-                                   (string-split
-                                     (first
-                                       (file->lines linux-memory-file)
-                                       )
-                                     ":"
-                                     )
-                                   )
-                                 #:left? #t
-                                 )
-                               " "
+    [("Unix")
+     (let
+         (
+          [linux-memory-file "/proc/meminfo"]
+          )
+       (cond
+         [(file-exists? linux-memory-file)
+          (let*
+              ;; "memory-string" can be #f if we have given a string where a number
+              ;; cannot be extracted to string->number
+              ;; which can happen sometimes when attempting to parse /proc/meminfo
+              ([memory-string (string->number
+                               (first (string-split
+                                       (string-trim
+                                        (second (string-split
+                                                 (first (file->lines linux-memory-file))
+                                                 ":"
+                                                 ))
+                                        #:left? #t
+                                        )
+                                       " "
+                                       ))
                                )
-                             )
-                           )
-                         1024
-                         )
-                       )
-                     "MB")]
-                  [else "N/A (could not parse /proc/meminfo)"]
-                  )
-                )]
+                              ])
+            (if (number? memory-string)
+                (string-append (number->string (quotient memory-string 1024)) "MB")
+                "N/A (misformatted /proc/meminfo?)"
+                )
+            )
+          ]
+         [else "N/A (could not parse /proc/meminfo)"]
+         )
+       )
+     ]
     [else "N/A (your OS isn't supported)"])
   )
 
