@@ -41,6 +41,7 @@ purge:	remove clean
 
 reinstall:	remove install
 
+# This builds docs
 setup:
 	$(RACO) setup --tidy --avoid-main $(DEPS-FLAGS) --pkgs $(PACKAGE-NAME)
 
