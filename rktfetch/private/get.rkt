@@ -17,6 +17,7 @@
  get-memory
  get-shell
  get-uptime
+ get-user
  )
 
 ;; Information gathering functions
@@ -213,4 +214,11 @@
               ]
     [else "N/A"]
     )
+  )
+
+(define (get-user)
+  (if (getenv "USER")
+      (getenv "USER")
+      "nobody"
+      )
   )

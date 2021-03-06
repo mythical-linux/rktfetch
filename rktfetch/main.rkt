@@ -17,7 +17,7 @@
 ;; Gather info and output
 (let*
     (
-     [user    (getenv "USER")]
+     [user    (get-user)]
      [host    (gethostname)]
      [cpu     (get-cpu)]
      [distro  (get-distro)]
