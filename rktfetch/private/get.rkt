@@ -75,7 +75,7 @@
   (let* (
          [editor-string (if (getenv "EDITOR")
                             (getenv "EDITOR")
-                            "none"
+                            "N/A (could not read $EDITOR, make sure it is set)"
                             )
                         ]
          )
