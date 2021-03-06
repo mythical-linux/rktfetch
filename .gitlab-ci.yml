@@ -10,7 +10,7 @@ stages:
 
 before_script:
   - apt-get update
-  - apt-get install -y make racket
+  - apt-get install -y make racket sqlite3
 
 test:
   stage: test
