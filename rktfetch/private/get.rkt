@@ -82,8 +82,7 @@
 
 (define (get-editor)
   (let* (
-         [editor-string (if (getenv "EDITOR")
-                            (getenv "EDITOR")
+         [editor-string (or (getenv "EDITOR")
                             "N/A (could not read $EDITOR, make sure it is set)"
                             )
                         ]
@@ -217,8 +216,7 @@
   )
 
 (define (get-user)
-  (if (getenv "USER")
-      (getenv "USER")
+  (or (getenv "USER")
       "nobody"
       )
   )
