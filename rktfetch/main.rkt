@@ -27,6 +27,7 @@
      [os      (string-titlecase (symbol->string (system-type 'os)))]
      [kernel  (get-kernel os)]
      [memory  (get-memory os)]
+     [pkg     (get-pkgmanager os)]
      [shell   (get-shell)]
      [uptime  (get-uptime os)]
      )
@@ -39,6 +40,7 @@
     "DISTRO:  " distro  "\n"
     "EDITOR:  " editor  "\n"
     "KERNEL:  " kernel  "\n"
+    "PKGS:    " pkg     "\n"
     "MEMORY:  " memory  "\n"
     "SHELL:   " shell   "\n"
     "UPTIME:  " uptime  "\n"

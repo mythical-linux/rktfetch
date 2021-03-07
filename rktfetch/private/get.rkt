@@ -15,6 +15,7 @@
  get-environment
  get-kernel
  get-memory
+ get-pkgmanager
  get-shell
  get-uptime
  get-user
@@ -164,6 +165,29 @@
        )
      ]
     [else "N/A (your OS isn't supported)"])
+  )
+
+(define (get-pkgmanager os)
+  (case os
+    [("Unix" "unix")
+     (cond
+       [(cmd-exists "apk")        "APK"]
+       [(cmd-exists "dnf")        "DNF"]
+       [(cmd-exists "dpkg")       "DPKG"]
+       [(cmd-exists "emerge")     "Portage"]
+       [(cmd-exists "guix")       "Guix"]
+       [(cmd-exists "nix-env")    "Nix"]
+       [(cmd-exists "pacman")     "Pacman"]
+       [(cmd-exists "pkg")        "PKG"]
+       [(cmd-exists "rpm")        "RPM"]
+       [(cmd-exists "xbps-query") "XBPS"]
+       [(cmd-exists "yum")        "YUM"]
+       [(cmd-exists "zypper")     "Zypper"]
+       [else "N/A (unknown package manager)"]
+       )
+     ]
+    [else "N/A (your OS isn't supported)"]
+    )
   )
 
 (define (seconds->time-str seconds)
