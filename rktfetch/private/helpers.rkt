@@ -9,7 +9,6 @@
 (provide
  basename
  cmd->flat-str
- cmd-exists
  grep
  grep-first->str
  remove-newlines
@@ -18,10 +17,6 @@
 ;; Helper functions
 (define (basename str)
   (last (string-split str "/"))
-  )
-
-(define (cmd-exists command)
-  (system (string-append "which " command " >/dev/null 2>&1"))
   )
 
 (define (cmd->flat-str command)
