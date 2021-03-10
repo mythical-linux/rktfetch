@@ -6,6 +6,7 @@ RACKET				:= racket
 RACO				:= raco
 
 ENTRYPOINT			:= $(PACKAGE-NAME)/main.rkt
+COMPILE-FLAGS		:= -v
 RUN-FLAGS			:=
 EXE-FLAGS			:= -v -o $(PACKAGE-EXE)
 DO-DOCS				:= --no-docs
@@ -15,10 +16,13 @@ DEPS-FLAGS			:= --check-pkg-deps --unused-pkg-deps
 
 all:	install setup test
 
+compile:
+	$(RACO) make $(COMPILE-FLAGS) $(ENTRYPOINT)
+
 run:
 	$(RACKET) $(RUN-FLAGS) $(ENTRYPOINT)
 
-exe:
+exe:	compile
 	$(RACO) exe $(EXE-FLAGS) $(ENTRYPOINT)
 
 install:
