@@ -1,10 +1,12 @@
 #lang racket/base
 
-(require racket/file)
-(require racket/list)
-(require racket/port)
-(require racket/string)
-(require racket/system)
+(require
+ racket/file
+ racket/list
+ racket/port
+ racket/string
+ racket/system
+ )
 
 (provide
  basename

@@ -1,9 +1,11 @@
 #lang racket/base
 
-(require racket/file)
-(require racket/list)
-(require racket/string)
-(require "helpers.rkt")
+(require
+ racket/file
+ racket/list
+ racket/string
+ "helpers.rkt"
+ )
 
 ;; Provide the appropriate functions
 (provide

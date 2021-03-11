@@ -1,9 +1,10 @@
 #lang racket/base
 
-;; (require racket/cmdline)
-(require racket/os)
-(require "private/get.rkt")
-(require "private/helpers.rkt")
+(require
+ racket/os
+ ;; racket/cmdline - add this when we get to cmdline options
+ "private/get.rkt"
+ )
 
 ;;; What we need:
 ;; CPU -- BSD
