@@ -112,7 +112,7 @@
       [(getenv "XDG_CURRENT_DESKTOP")]
       [(getenv "DESKTOP_SESSION")]
       [xinitrc-exists (last (string-split (last (file->lines xinitrc)) " "))]
-      [else "N/A (could not read the specified env variables, nor could was parsing xinitrc possible"])
+      [else "N/A (could not read the specified env variables, nor could was parsing xinitrc possible)"])
     )
   )
 
