@@ -15,6 +15,7 @@ before_script:
 test:
   stage: test
   script:
+    - make compile
     - make run
     - make install
     - make setup
