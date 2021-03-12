@@ -12,7 +12,6 @@
  get-cpu
  get-device
  get-distro
- get-distro
  get-editor
  get-environment
  get-kernel
@@ -64,22 +63,29 @@
     )
   )
 
-(define (get-distro)
-  (let
-      (
-       [os-release-list '("/bedrock/etc/os-release" "/etc/os-release" "/var/lib/os-release")]
-       [dist ""]
+(define (get-distro os)
+  (case os
+    [("Unix" "unix")
+     (let
+         (
+          [os-release-list '("/bedrock/etc/os-release" "/etc/os-release" "/var/lib/os-release")]
+          [dist ""]
+          )
+       (for ([l os-release-list]
+             #:when (file-exists? l))
+         (set! dist
+               (string-replace (string-replace (grep-first->str "PRETTY_NAME=" l) "PRETTY_NAME=" "") "\"" "")
+               )
+         )
+       (if (non-empty-string? dist)
+           dist
+           "N/A (could not read '/bedrock/etc/os-release', '/etc/os-release', nor '/var/lib/os-release')"
+           )
        )
-    (for ([l os-release-list]
-          #:when (file-exists? l))
-      (set! dist
-            (string-replace (string-replace (grep-first->str "PRETTY_NAME=" l) "PRETTY_NAME=" "") "\"" "")
-            )
-      )
-    (if (non-empty-string? dist)
-        dist
-        "N/A (could not read '/bedrock/etc/os-release', '/etc/os-release', nor '/var/lib/os-release')"
-        )
+     ]
+    [("Windows" "windows")
+     (cmd->flat-str "ver")
+     ]
     )
   )
 

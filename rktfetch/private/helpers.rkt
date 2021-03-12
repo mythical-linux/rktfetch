@@ -28,7 +28,8 @@
   )
 
 (define (remove-newlines str)
-  (string-replace str "\n" "")
+  ;; \r\n for NT
+  (string-replace (string-replace str "\r\n" "") "\n" "")
   )
 
 ;; TODO: add keywords to control behavior
