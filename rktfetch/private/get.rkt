@@ -86,6 +86,7 @@
     [("Windows" "windows")
      (cmd->flat-str "ver")
      ]
+    [else "Other"]
     )
   )
 
