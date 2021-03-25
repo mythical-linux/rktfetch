@@ -14,6 +14,7 @@
  grep
  grep-first->str
  remove-newlines
+ seconds->time-str
  )
 
 ;; Helper functions
@@ -60,6 +61,26 @@
     (if (empty? grep-list)
         ""
         (first grep-list)
+        )
+    )
+  )
+
+(define (seconds->time-str seconds)
+  (let*
+      (
+       [minutes (modulo (quotient seconds 60) 60)]
+       [hours   (modulo (quotient seconds (* 60 60)) 24)]
+       [days            (quotient seconds (* 60 60 24))]
+       )
+    (if (= 0 days hours minutes)
+        (string-append
+         (number->string seconds) "s"
+         )
+        (string-append
+         (number->string days)    "d" " "
+         (number->string hours)   "h" " "
+         (number->string minutes) "m" " "
+         )
         )
     )
   )
