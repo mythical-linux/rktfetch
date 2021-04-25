@@ -4,10 +4,15 @@
 #lang racket/base
 
 (require
+ racket/format
+ racket/list
  racket/os
+ racket/string
  ;; racket/cmdline - add this when we get to cmdline options
  "private/get.rkt"
+ "private/logo.rkt"
  )
+
 
 ;;; What we need:
 ;; CPU -- BSD
@@ -17,6 +22,17 @@
 ;; Packages
 ;; Terminal
 ;; Uptime -- BSD
+
+
+(define (>- val num1 num2)
+  "Return no less than VAL from difference between NUM1 and NUM2."
+  (let
+      ([res (- num1 num2)])
+    (if (> res val) res val
+        )
+    )
+  )
+
 
 (module+ main
   ;; Gather info and output
@@ -35,21 +51,49 @@
        [pkg     (get-pkgmanager os)]
        [shell   (get-shell)]
        [uptime  (get-uptime os)]
+       [logo
+        (hash-ref system-logos os)
+        ]
+       [info
+        (list
+         (string-append user "@" host       "\n")
+         (string-append "CPU:     " cpu     "\n")
+         (string-append "DESKTOP: " desktop "\n")
+         (string-append "DEVICE:  " device  "\n")
+         (string-append "DISTRO:  " distro  "\n")
+         (string-append "EDITOR:  " editor  "\n")
+         (string-append "KERNEL:  " kernel  "\n")
+         (string-append "PKGS:    " pkg     "\n")
+         (string-append "MEMORY:  " memory  "\n")
+         (string-append "SHELL:   " shell   "\n")
+         (string-append "UPTIME:  " uptime  "\n")
+         )
+        ]
+       [logo-side
+        (append logo (make-list (>- 0 (length info) (length logo)) ""))
+        ]
+       [info-side
+        (append info (make-list (>- 0 (length logo) (length info)) ""))
+        ]
+       [logo-longest-size
+        (string-length (car (sort logo #:key string-length >)))
+        ]
        )
-    (display
-     (string-append
-      user "@" host       "\n"
-      "CPU:     " cpu     "\n"
-      "DESKTOP: " desktop "\n"
-      "DEVICE:  " device  "\n"
-      "DISTRO:  " distro  "\n"
-      "EDITOR:  " editor  "\n"
-      "KERNEL:  " kernel  "\n"
-      "PKGS:    " pkg     "\n"
-      "MEMORY:  " memory  "\n"
-      "SHELL:   " shell   "\n"
-      "UPTIME:  " uptime  "\n"
-      )
-     )
+
+    (display (string-join
+              (map
+               (lambda (side1 side2)
+                 (string-append
+                  (~a side1
+                      #:min-width (- logo-longest-size (string-length side1)))
+                  "  " side2
+                  )
+                 )
+               logo-side info-side
+               )
+              ""
+              )
+             )
+
     )
   )
