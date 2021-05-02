@@ -1,5 +1,7 @@
 PACKAGE-NAME		:= $(shell basename $(abspath .))
 PACKAGE-EXE			:= $(PACKAGE-NAME).exe
+PACKAGE-DIST		:= $(PACKAGE-NAME)_distribution
+PACKAGE-DIST-TAR	:= $(PACKAGE-DIST).tar.gz
 PACKAGE-ZIP			:= $(PACKAGE-NAME).zip
 
 RACKET				:= racket
@@ -28,11 +30,18 @@ exe:	compile
 install:
 	$(RACO) pkg install $(INSTALL-FLAGS) --name $(PACKAGE-NAME)
 
-dist:
+dist:	exe
+	mkdir -p $(PACKAGE-DIST)
+	$(RACO) distribute $(PACKAGE-DIST) $(PACKAGE-EXE)
+	tar cfz $(PACKAGE-DIST-TAR) $(PACKAGE-DIST)
+
+pkg:
 	$(RACO) pkg create --source $(PWD)
 
 distclean:
-	if [ -f $(PACKAGE-ZIP) ] ; then rm *.zip* ; fi
+	if [ -d $(PACKAGE-DIST) ] ; then rm -r $(PACKAGE-DIST) ; fi
+	if [ -f $(PACKAGE-DIST-TAR) ] ; then rm $(PACKAGE-DIST-TAR) ; fi
+	if [ -f $(PACKAGE-ZIP) ] ; then rm $(PACKAGE-ZIP)* ; fi
 
 clean:	distclean
 	find . -depth -type d -name 'compiled' -exec rm -r {} \;
