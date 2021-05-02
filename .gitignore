@@ -1,11 +1,15 @@
-*~
-\#*
-.\#*
-.DS_Store
-compiled/
+*.dep
 *.exe
+*.tar.gz
 *.zip*
+*.zo
+*_distribution/
+*~
+.DS_Store
+.\#*
 /doc/
+\#*
+compiled/
 
 # Vim swap files
 [._]*.s[a-v][a-z]
