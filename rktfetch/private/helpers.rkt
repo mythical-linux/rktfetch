@@ -84,3 +84,9 @@
         )
     )
   )
+
+
+(module+ test
+  (require rackunit)
+  (check-equal? "0d 0h 1m " (seconds->time-str 60))
+  )
