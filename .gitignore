@@ -7,7 +7,7 @@
 *~
 .DS_Store
 .\#*
-/doc/
+doc/
 \#*
 compiled/
 
