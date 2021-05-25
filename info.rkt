@@ -6,7 +6,6 @@
 (define version "0.0.0")
 
 (define collection 'multi)
-(define scribblings '(("scribblings/rktfetch.scrbl" ())))
 
 (define deps
   '(
