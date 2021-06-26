@@ -1,3 +1,6 @@
+;; Information gathering functions
+
+
 #lang racket/base
 
 (require
@@ -7,22 +10,9 @@
  "helpers.rkt"
  )
 
-;; Provide the appropriate functions
-(provide
- get-cpu
- get-device
- get-distro
- get-editor
- get-environment
- get-kernel
- get-memory
- get-pkgmanager
- get-shell
- get-uptime
- get-user
- )
+(provide (all-defined-out) )
 
-;; Information gathering functions
+
 (define (get-cpu)
   (let
       (
