@@ -247,7 +247,7 @@
 
 (define (get-uptime os)
   (case os
-    [("Unix")  (get-uptime-unix)]
+    [("unix")  (get-uptime-unix)]
     [else "N/A"]
     )
   )
