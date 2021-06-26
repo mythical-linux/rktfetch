@@ -11,14 +11,7 @@
  racket/system
  )
 
-(provide
- basename
- cmd->flat-str
- grep
- grep-first->str
- remove-newlines
- seconds->time-str
- )
+(provide (all-defined-out))
 
 
 (define (basename str)
