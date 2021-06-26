@@ -1,3 +1,6 @@
+;; Helper functions
+
+
 #lang racket/base
 
 (require
@@ -17,7 +20,7 @@
  seconds->time-str
  )
 
-;; Helper functions
+
 (define (basename str)
   (last (string-split str "/"))
   )
