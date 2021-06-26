@@ -195,21 +195,42 @@
   )
 
 
+(define (get-pkgmanagers-unix)
+  (let
+      (
+       [all  '#hash(
+                    ["apk"        . "APK"]
+                    ["dnf"        . "DNF"]
+                    ["dpkg"       . "DPKG"]
+                    ["emerge"     . "Portage"]
+                    ["guix"       . "Guix"]
+                    ["nix-env"    . "Nix"]
+                    ["pacman"     . "Pacman"]
+                    ["pkg"        . "PKG"]
+                    ["rpm"        . "RPM"]
+                    ["xbps-query" . "XBPS"]
+                    ["yum"        . "YUM"]
+                    ["zypper"     . "Zypper"]
+                    )]
+       [found '()]
+       )
+    (hash-for-each
+     all
+     (lambda (k v)
+       (when (find-executable-path k)  (set! found (cons v found)))
+       )
+     )
+    found
+    )
+  )
+
 (define (get-pkgmanager-unix)
-  (cond
-    [(find-executable-path "apk")        "APK"]
-    [(find-executable-path "dnf")        "DNF"]
-    [(find-executable-path "dpkg")       "DPKG"]
-    [(find-executable-path "emerge")     "Portage"]
-    [(find-executable-path "guix")       "Guix"]
-    [(find-executable-path "nix-env")    "Nix"]
-    [(find-executable-path "pacman")     "Pacman"]
-    [(find-executable-path "pkg")        "PKG"]
-    [(find-executable-path "rpm")        "RPM"]
-    [(find-executable-path "xbps-query") "XBPS"]
-    [(find-executable-path "yum")        "YUM"]
-    [(find-executable-path "zypper")     "Zypper"]
-    [else "N/A (unknown package manager)"]
+  (let
+      ([pms (get-pkgmanagers-unix)])
+    (if (null? pms)
+        "N/A (unknown package manager)"
+        (string-join pms ", ")
+        )
     )
   )
 
