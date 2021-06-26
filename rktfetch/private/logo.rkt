@@ -13,7 +13,7 @@
 (define system-logos
   (hash
 
-   "Other"
+   "other"
    '(
     "  ___   ______ __  __  ____ ____ "
     " // \\  | || | ||  || ||    || \\"
@@ -21,7 +21,7 @@
     " \\_//    ||   ||  || ||___ || \\"
     )
 
-   "Unix"
+   "unix"
    '(
      "__ __ __  __ __ _   _"
      "|| || ||\\ || || \\\\ //"
@@ -29,7 +29,7 @@
      "\\\\_// || \\|| || // \\\\"
      )
 
-   "Linux"
+   "linux"
    '(
      "        #####"
      "       #######"
@@ -45,7 +45,7 @@
      "  #################"
      )
 
-   "Macos"
+   "macos"
    '(
      "                    'c."
      "                 ,xNMM."
@@ -66,7 +66,7 @@
      "       .cooc,.    .,coo:."
      )
 
-   "Windows"
+   "windows"
    '(
      "                                ..,"
      "                    ....,,:;+ccllll"
@@ -91,7 +91,7 @@
 
    ;; BSD   distributions
 
-   "Freebsd"
+   "freebsd"
    '(
      "```                        `"
      "  ` `.....---.......--.```   -/"
@@ -110,7 +110,7 @@
      "          .---.....----."
      )
 
-   "Openbsd"
+   "openbsd"
    '(
      "                                     _"
      "                                    (_)"
@@ -137,7 +137,7 @@
      "       `.\\"
      )
 
-   "Netbsd"
+   "netbsd"
    '(
      "                     `-/oshdmNMNdhyo+:-`"
      "y/s+:-``    `.-:+oydNMMMMNhs/-``"
@@ -160,7 +160,7 @@
 
    ;; Linux distributions
 
-   "Alpine"
+   "alpine"
    '(
      "       .hddddddddddddddddddddddh."
      "      :dddddddddddddddddddddddddd:"
@@ -184,7 +184,7 @@
      "       .hddddddddddddddddddddddh."
      )
 
-   "Arch"
+   "arch"
    '(
      "                   -`"
      "                  .o+`"
@@ -207,7 +207,7 @@
      " .`                                 `/"
      )
 
-   "Ataraxia"
+   "ataraxia"
    '(
      "                    'l:"
      "        loooooo"
@@ -235,7 +235,7 @@
      "                       cooolc        .ooooooooooool"
      )
 
-   "Debian"
+   "debian"
    '(
      "       _,met$$$$$gg."
      "    ,g$$$$$$$$$$$$$$$P."
@@ -256,7 +256,7 @@
      "              `''''''"
      )
 
-   "Fedora"
+   "fedora"
    '(
      "          /:-------------:\\"
      "       :-------------------::"
@@ -277,7 +277,7 @@
      ":---------------------://"
      )
 
-   "Gentoo"
+   "gentoo"
    '(
      "         -/oyddmdhs+:."
      "     -odNMMMMMMMMNNmhy+-`"
@@ -299,7 +299,7 @@
      "  `-//////:--."
      )
 
-   "Guixsd"
+   "guixsd"
    '(
      " ..                             `."
      " `--..```..`           `..```..--`"
@@ -313,7 +313,7 @@
      "              `-....`"
      )
 
-   "Nixos"
+   "nixos"
    '(
      "          ::::.    ':::::     ::::'"
      "          ':::::    ':::::.  ::::'"
@@ -336,7 +336,7 @@
      "         .::::      ::::      '::::."
      )
 
-   "Redhat"
+   "redhat"
    '(
      "           .MMM..:MMMMMMM"
      "          MMMMMMMMMMMMMMMMMM"
@@ -358,7 +358,7 @@
      "                ``MMMMMMMMMMMMMMMMM'"
      )
 
-   "Slackware"
+   "slackware"
    '(
      "                  :::::::"
      "            :::::::::::::::::::"
@@ -383,7 +383,7 @@
      "                ::::::::::::"
      )
 
-   "Suse"
+   "suse"
    '(
      "           .;ldkO0000Okdl;."
      "       .;d00xl:^''''''^:ok00d;."
@@ -405,7 +405,7 @@
      "            '^:ldxkkkkxdl:^'"
      )
 
-   "Void"
+   "void"
    '(
      "                __.;=====;.__"
      "            _.=+==++=++=+=+===;."

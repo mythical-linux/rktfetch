@@ -13,6 +13,11 @@
 (provide (all-defined-out) )
 
 
+(define (get-os)
+  (symbol->string (system-type 'os))
+  )
+
+
 (define (get-cpu)
   (let
       (
@@ -80,8 +85,8 @@
 
 (define (get-distro os)
   (case os
-    [("Unix" "unix") (get-distro-unix)]
-    [("Windows" "windows") (get-distro-windows)]
+    [("unix")     (get-distro-unix)]
+    [("windows")  (get-distro-windows)]
     [else "Other"]
     )
   )
@@ -137,7 +142,7 @@
 
 (define (get-kernel os)
   (case os
-    [("Unix")  (get-kernel-unix)]
+    [("unix")  (get-kernel-unix)]
     [else "N/A (your OS isn't supported)"])
   )
 
@@ -179,7 +184,7 @@
 
 (define (get-memory os)
   (case os
-    [("Unix")  (get-memory-unix)]
+    [("unix")  (get-memory-unix)]
     [else "N/A (your OS isn't supported)"])
   )
 
@@ -204,7 +209,7 @@
 
 (define (get-pkgmanager os)
   (case os
-    [("Unix" "unix")  (get-pkgmanager-unix)]
+    [("unix")  (get-pkgmanager-unix)]
     [else "N/A (your OS isn't supported)"]
     )
   )
@@ -218,23 +223,25 @@
   )
 
 
+(define (get-uptime-unix)
+  (let
+      ([linux-uptime-file "/proc/uptime"])
+    (cond
+      [(file-exists? linux-uptime-file)
+       (seconds->time-str
+        (string->number
+         (first (string-split (remove-newlines (file->string linux-uptime-file)) "." #:trim? #t))
+         )
+        )
+       ]
+      [(cmd->flat-str "uptime -p")]
+      )
+    )
+  )
+
 (define (get-uptime os)
   (case os
-    [("Unix") (let (
-                    [linux-uptime-file "/proc/uptime"]
-                    )
-                (cond
-                  [(file-exists? linux-uptime-file)
-                   (seconds->time-str
-                    (string->number
-                     (first (string-split (remove-newlines (file->string linux-uptime-file)) "." #:trim? #t))
-                     )
-                    )
-                   ]
-                  [(cmd->flat-str "uptime -p")]
-                  )
-                )
-              ]
+    [("Unix")  (get-uptime-unix)]
     [else "N/A"]
     )
   )

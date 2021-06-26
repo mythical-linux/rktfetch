@@ -44,7 +44,7 @@
        [desktop (get-environment)]
        [device  (get-device)]
        [editor  (get-editor)]
-       [os      (string-titlecase (symbol->string (system-type 'os)))]
+       [os      (get-os)]
        [distro  (get-distro os)]
        [kernel  (get-kernel os)]
        [memory  (get-memory os)]
