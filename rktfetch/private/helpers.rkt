@@ -22,15 +22,15 @@
   (last (string-split str "/"))
   )
 
+(define (remove-newlines str)
+  ;; \r\n for NT
+  (string-trim (string-trim str "\r\n") "\n")
+  )
+
 (define (cmd->flat-str command)
   (remove-newlines
    (with-output-to-string (lambda () (system command)))
    )
-  )
-
-(define (remove-newlines str)
-  ;; \r\n for NT
-  (string-replace (string-replace str "\r\n" "") "\n" "")
   )
 
 ;; TODO: add keywords to control behavior
