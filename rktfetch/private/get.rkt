@@ -63,13 +63,19 @@
 (define (get-distro-unix)
   (let
       (
-       [os-release-list '("/bedrock/etc/os-release" "/etc/os-release" "/var/lib/os-release")]
+       [os-release-list '(
+                          "/bedrock/etc/os-release"
+                          "/etc/os-release"
+                          "/var/lib/os-release"
+                          )]
        [dist ""]
        )
     (for ([l os-release-list]
           #:when (file-exists? l))
       (set! dist
-        (string-replace (string-replace (grep-first->str "PRETTY_NAME=" l) "PRETTY_NAME=" "") "\"" "")
+        (string-replace (string-trim
+                         (grep-first->str "PRETTY_NAME=" l)
+                         "PRETTY_NAME=") "\"" "")
         )
       )
     (if (non-empty-string? dist)
