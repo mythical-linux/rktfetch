@@ -37,6 +37,7 @@
     )
   )
 
+
 (define (get-device)
   (let (
         [device-file-list '("/sys/devices/virtual/dmi/id/product_name" "/sys/firmware/devicetree/base/model")]
@@ -47,44 +48,50 @@
         (remove-newlines (file->string dl))
         ))
     (if (non-empty-string? dev)
-      dev
-      "N/A (could not read '/sys/devices/virtual/dmi/id/product_name' nor '/sys/firmware/devicetree/base/model')"
-      )
+        dev
+        "N/A (could not read '/sys/devices/virtual/dmi/id/product_name' nor '/sys/firmware/devicetree/base/model')"
+        )
     )
+  )
+
+
+(define (get-distro-unix)
+  (let
+      (
+       [os-release-list '("/bedrock/etc/os-release" "/etc/os-release" "/var/lib/os-release")]
+       [dist ""]
+       )
+    (for ([l os-release-list]
+          #:when (file-exists? l))
+      (set! dist
+        (string-replace (string-replace (grep-first->str "PRETTY_NAME=" l) "PRETTY_NAME=" "") "\"" "")
+        )
+      )
+    (if (non-empty-string? dist)
+        dist
+        "N/A (could not read '/bedrock/etc/os-release', '/etc/os-release', nor '/var/lib/os-release')"
+        )
+    )
+  )
+
+(define (get-distro-windows)
+  (cmd->flat-str "ver")
   )
 
 (define (get-distro os)
   (case os
-    [("Unix" "unix")
-     (let
-         (
-          [os-release-list '("/bedrock/etc/os-release" "/etc/os-release" "/var/lib/os-release")]
-          [dist ""]
-          )
-       (for ([l os-release-list]
-             #:when (file-exists? l))
-         (set! dist
-               (string-replace (string-replace (grep-first->str "PRETTY_NAME=" l) "PRETTY_NAME=" "") "\"" "")
-               )
-         )
-       (if (non-empty-string? dist)
-           dist
-           "N/A (could not read '/bedrock/etc/os-release', '/etc/os-release', nor '/var/lib/os-release')"
-           )
-       )
-     ]
-    [("Windows" "windows")
-     (cmd->flat-str "ver")
-     ]
+    [("Unix" "unix") (get-distro-unix)]
+    [("Windows" "windows") (get-distro-windows)]
     [else "Other"]
     )
   )
 
+
 (define (get-editor)
   (let* (
          [editor-string (or (getenv "EDITOR")
-                            "N/A (could not read $EDITOR, make sure it is set)"
-                            )
+                           "N/A (could not read $EDITOR, make sure it is set)"
+                           )
                         ]
          )
     (if (string-prefix? editor-string "/")
@@ -93,15 +100,16 @@
     )
   )
 
+
 (define (get-environment)
   (let*
       (
        [xinitrc (or (getenv "XINITRC")
-                    (if (getenv "HOME")
-                        (string-append (getenv "HOME") "/.xinitrc")
-                        "/root/.xinitrc"
-                        )
-                    )]
+                   (if (getenv "HOME")
+                       (string-append (getenv "HOME") "/.xinitrc")
+                       "/root/.xinitrc"
+                       )
+                   )]
        [xinitrc-exists (file-exists? xinitrc)]
        )
     (cond
@@ -113,81 +121,94 @@
     )
   )
 
+
+(define (get-kernel-unix)
+  (let
+      ([linux-kernel-file "/proc/sys/kernel/osrelease"])
+    (cond
+      [(file-exists? linux-kernel-file)
+       (remove-newlines  (file->string linux-kernel-file))
+       ]
+      [(cmd->flat-str "uname -r")]
+      [else "N/A (could not read '/proc/sys/kernel/osrelease' nor could run 'uname')"]
+      )
+    )
+  )
+
 (define (get-kernel os)
-     (case os
-       [("Unix") (let (
-                       [linux-kernel-file "/proc/sys/kernel/osrelease"]
-                       )
-                   (cond
-                       [(file-exists? linux-kernel-file) (remove-newlines  (file->string linux-kernel-file))]
-                       [(cmd->flat-str "uname -r")]
-                       [else "N/A (could not read '/proc/sys/kernel/osrelease' nor could run 'uname')"]
-                       )
-                   )]
-       [else "N/A (your OS isn't supported)"])
+  (case os
+    [("Unix")  (get-kernel-unix)]
+    [else "N/A (your OS isn't supported)"])
+  )
+
+
+(define (get-memory-unix)
+  (let
+      (
+       [linux-memory-file "/proc/meminfo"]
+       )
+    (cond
+      [(file-exists? linux-memory-file)
+       (let*
+           ;; "memory-string" can be #f if we have given a string where a number
+           ;; cannot be extracted to string->number
+           ;; which can happen sometimes when attempting to parse /proc/meminfo
+           ([memory-string (string->number
+                            (first (string-split
+                                    (string-trim
+                                     (second (string-split
+                                              (first (file->lines linux-memory-file))
+                                              ":"
+                                              ))
+                                     #:left? #t
+                                     )
+                                    " "
+                                    ))
+                            )
+                           ])
+         (if (number? memory-string)
+             (string-append (number->string (quotient memory-string 1024)) "MB")
+             "N/A (misformatted /proc/meminfo?)"
+             )
+         )
+       ]
+      [else "N/A (could not parse /proc/meminfo)"]
+      )
+    )
   )
 
 (define (get-memory os)
   (case os
-    [("Unix")
-     (let
-         (
-          [linux-memory-file "/proc/meminfo"]
-          )
-       (cond
-         [(file-exists? linux-memory-file)
-          (let*
-              ;; "memory-string" can be #f if we have given a string where a number
-              ;; cannot be extracted to string->number
-              ;; which can happen sometimes when attempting to parse /proc/meminfo
-              ([memory-string (string->number
-                               (first (string-split
-                                       (string-trim
-                                        (second (string-split
-                                                 (first (file->lines linux-memory-file))
-                                                 ":"
-                                                 ))
-                                        #:left? #t
-                                        )
-                                       " "
-                                       ))
-                               )
-                              ])
-            (if (number? memory-string)
-                (string-append (number->string (quotient memory-string 1024)) "MB")
-                "N/A (misformatted /proc/meminfo?)"
-                )
-            )
-          ]
-         [else "N/A (could not parse /proc/meminfo)"]
-         )
-       )
-     ]
+    [("Unix")  (get-memory-unix)]
     [else "N/A (your OS isn't supported)"])
+  )
+
+
+(define (get-pkgmanager-unix)
+  (cond
+    [(find-executable-path "apk")        "APK"]
+    [(find-executable-path "dnf")        "DNF"]
+    [(find-executable-path "dpkg")       "DPKG"]
+    [(find-executable-path "emerge")     "Portage"]
+    [(find-executable-path "guix")       "Guix"]
+    [(find-executable-path "nix-env")    "Nix"]
+    [(find-executable-path "pacman")     "Pacman"]
+    [(find-executable-path "pkg")        "PKG"]
+    [(find-executable-path "rpm")        "RPM"]
+    [(find-executable-path "xbps-query") "XBPS"]
+    [(find-executable-path "yum")        "YUM"]
+    [(find-executable-path "zypper")     "Zypper"]
+    [else "N/A (unknown package manager)"]
+    )
   )
 
 (define (get-pkgmanager os)
   (case os
-    [("Unix" "unix")
-     (cond
-       [(find-executable-path "apk")        "APK"]
-       [(find-executable-path "dnf")        "DNF"]
-       [(find-executable-path "dpkg")       "DPKG"]
-       [(find-executable-path "emerge")     "Portage"]
-       [(find-executable-path "guix")       "Guix"]
-       [(find-executable-path "nix-env")    "Nix"]
-       [(find-executable-path "pacman")     "Pacman"]
-       [(find-executable-path "pkg")        "PKG"]
-       [(find-executable-path "rpm")        "RPM"]
-       [(find-executable-path "xbps-query") "XBPS"]
-       [(find-executable-path "yum")        "YUM"]
-       [(find-executable-path "zypper")     "Zypper"]
-       [else "N/A (unknown package manager)"]
-       )
-     ]
+    [("Unix" "unix")  (get-pkgmanager-unix)]
     [else "N/A (your OS isn't supported)"]
     )
   )
+
 
 (define (get-shell)
   (if (getenv "SHELL")
@@ -195,6 +216,7 @@
       "N/A (shell not set)"
       )
   )
+
 
 (define (get-uptime os)
   (case os
@@ -217,8 +239,9 @@
     )
   )
 
+
 (define (get-user)
   (or (getenv "USER")
-      "nobody"
-      )
+     "nobody"
+     )
   )
