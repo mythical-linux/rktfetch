@@ -99,15 +99,12 @@
 
 
 (define (get-editor)
-  (let* (
-         [editor-string (or (getenv "EDITOR")
-                           "N/A (could not read $EDITOR, make sure it is set)"
-                           )
-                        ]
-         )
-    (if (string-prefix? editor-string "/")
-        (string-titlecase (basename editor-string))
-        (string-titlecase editor-string))
+  (let
+      ([EDITOR (getenv "EDITOR")])
+    (if EDITOR
+        (string-titlecase (basename EDITOR))
+        "N/A (could not read $EDITOR, make sure it is set)"
+        )
     )
   )
 
