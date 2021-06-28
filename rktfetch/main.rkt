@@ -4,11 +4,11 @@
 #lang racket/base
 
 (require
- racket/format
- racket/list
- racket/os
- racket/string
  ;; racket/cmdline - add this when we get to cmdline options
+ (only-in racket/format ~a)
+ (only-in racket/list make-list)
+ (only-in racket/os gethostname)
+ (only-in racket/string string-join)
  "private/get.rkt"
  "private/logo.rkt"
  )
@@ -38,18 +38,18 @@
   ;; Gather info and output
   (let*
       (
-       [user    (get-user)]
-       [host    (gethostname)]
        [cpu     (get-cpu)]
-       [desktop (get-environment)]
+       [desktop (get-desktop)]
        [device  (get-device)]
        [editor  (get-editor)]
+       [host    (gethostname)]
        [os      (get-os)]
+       [shell   (get-shell)]
+       [user    (get-user)]
        [distro  (get-distro os)]
        [kernel  (get-kernel os)]
        [memory  (get-memory os)]
-       [pkg     (get-pkgmanager os)]
-       [shell   (get-shell)]
+       [pkg     (get-pkg    os)]
        [uptime  (get-uptime os)]
        [logo
         (hash-ref system-logos os)
