@@ -8,6 +8,7 @@
 
 (define (get-user)
   (or (getenv "USER")
+     (getenv "USERNAME")
      "nobody"
      )
   )
