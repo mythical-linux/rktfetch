@@ -82,11 +82,11 @@
 
     (display (string-join
               (map
-               (lambda (side1 side2)
+               (lambda (left right)
                  (string-append
-                  (~a side1
-                      #:min-width (- logo-longest-size (string-length side1)))
-                  "  " side2
+                  (~a left
+                      #:min-width (- logo-longest-size (string-length left)))
+                  "  " right
                   )
                  )
                logo-side info-side
