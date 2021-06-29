@@ -56,17 +56,17 @@
         ]
        [info
         (list
-         (string-append user "@" host       "\n")
-         (string-append "CPU:     " cpu     "\n")
-         (string-append "DESKTOP: " desktop "\n")
-         (string-append "DEVICE:  " device  "\n")
-         (string-append "DISTRO:  " distro  "\n")
-         (string-append "EDITOR:  " editor  "\n")
-         (string-append "KERNEL:  " kernel  "\n")
-         (string-append "PKGS:    " pkg     "\n")
-         (string-append "MEMORY:  " memory  "\n")
-         (string-append "SHELL:   " shell   "\n")
-         (string-append "UPTIME:  " uptime  "\n")
+         (string-append user   "@"  host   )
+         (string-append "CPU:     " cpu    )
+         (string-append "DESKTOP: " desktop)
+         (string-append "DEVICE:  " device )
+         (string-append "DISTRO:  " distro )
+         (string-append "EDITOR:  " editor )
+         (string-append "KERNEL:  " kernel )
+         (string-append "PKGS:    " pkg    )
+         (string-append "MEMORY:  " memory )
+         (string-append "SHELL:   " shell  )
+         (string-append "UPTIME:  " uptime )
          )
         ]
        [logo-side
@@ -78,22 +78,22 @@
        [logo-longest-size
         (string-length (car (sort logo #:key string-length >)))
         ]
-       )
-
-    (display (string-join
-              (map
-               (lambda (left right)
-                 (string-append
-                  (~a left
-                      #:min-width (- logo-longest-size (string-length left)))
-                  "  " right
-                  )
-                 )
-               logo-side info-side
-               )
-              ""
-              )
+       [output
+        (string-join
+         (map
+          (lambda (left right)
+            (string-append
+             (~a left #:min-width (- logo-longest-size (string-length left)))
+             "  " right
+             "\n"
              )
-
+            )
+          logo-side info-side
+          )
+         ""
+         )
+        ]
+       )
+    (display output)
     )
   )
