@@ -19,8 +19,8 @@
 ;; TODO: add keywords to control behavior
 ;; TODO: add regexp?
 
-(define/contract (grep str file-name #:first [first-hit #f])
-  (->* (string? path-string?) (#:first boolean?) list?)
+(define/contract (grep str file-name #:first-hit [first-hit #f])
+  (->* (string? path-string?) (#:first-hit boolean?) list?)
   (let
       ([out '()])
     (for (
@@ -41,10 +41,17 @@
 (define/contract (grep-first->str str file-name)
   (-> string? path-string? string?)
   (let*
-      ([grep-list (grep str file-name #:first #t)])
+      ([grep-list (grep str file-name #:first-hit #t)])
     (if (empty? grep-list)
         ""
         (first grep-list)
         )
     )
+  )
+
+
+(module+ test
+  (require rackunit)
+
+  (check-equal?  (grep-first->str "lang" "./grep.rkt")  "#lang racket/base")
   )
