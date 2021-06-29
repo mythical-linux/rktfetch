@@ -3,10 +3,13 @@
 
 #lang racket/base
 
+(require racket/contract)
+
 (provide (all-defined-out))
 
 
-(define (seconds->time-str seconds)
+(define/contract (seconds->time-str seconds)
+  (-> number? string?)
   (let*
       (
        [minutes (modulo (quotient seconds 60) 60)]

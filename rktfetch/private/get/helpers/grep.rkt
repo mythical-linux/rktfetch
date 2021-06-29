@@ -4,6 +4,7 @@
 #lang racket/base
 
 (require
+ racket/contract
  (only-in racket/file file->lines)
  (only-in racket/string string-contains?)
  (only-in racket/list
@@ -18,9 +19,8 @@
 ;; TODO: add keywords to control behavior
 ;; TODO: add regexp?
 
-(define (grep str file-name
-              #:first [first-hit #f]
-              )
+(define/contract (grep str file-name #:first [first-hit #f])
+  (->* (string? path-string?) (#:first boolean?) list?)
   (let
       ([out '()])
     (for (
@@ -38,7 +38,8 @@
     )
   )
 
-(define (grep-first->str str file-name)
+(define/contract (grep-first->str str file-name)
+  (-> string? path-string? string?)
   (let*
       ([grep-list (grep str file-name #:first #t)])
     (if (empty? grep-list)

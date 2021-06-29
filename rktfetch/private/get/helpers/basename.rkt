@@ -4,6 +4,7 @@
 #lang racket/base
 
 (require
+ racket/contract
  (only-in racket/list last)
  (only-in racket/string string-split)
  )
@@ -12,5 +13,6 @@
 
 
 (define (basename str)
+  (-> string? string?)
   (last (string-split str "/"))
   )
