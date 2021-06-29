@@ -8,8 +8,8 @@
  (only-in racket/file file->string)
  (only-in racket/string string-split)
  "helpers/cmd.rkt"
+ "helpers/string.rkt"
  "helpers/time.rkt"
- "helpers/trim.rkt"
  )
 
 (provide get-uptime)

@@ -6,7 +6,7 @@
 (require
  (only-in racket/port with-output-to-string)
  (only-in racket/system system)
- (only-in "trim.rkt" remove-newlines)
+ (only-in "string.rkt" remove-newlines)
  )
 
 (provide (all-defined-out))

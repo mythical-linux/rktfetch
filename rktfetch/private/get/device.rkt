@@ -5,7 +5,7 @@
 
 (require
  (only-in racket/file file->string)
- "helpers/trim.rkt"
+ "helpers/string.rkt"
  )
 
 (provide get-device)
