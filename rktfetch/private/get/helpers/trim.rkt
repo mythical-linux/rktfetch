@@ -4,17 +4,23 @@
 #lang racket/base
 
 (require
- (only-in racket/string string-trim)
+ racket/contract
+ (only-in racket/string string-replace)
  )
 
 (provide (all-defined-out))
 
 
-(define (trim str lst)
+(define/contract (string-remove str substr)
+  (-> string? string? string?)
+  (string-replace str substr "")
+  )
+
+(define/contract (remove-strings str lst)
+  (-> string? (listof string?) string?)
   (cond
-    [(not (list? lst))  (error 'oops "Not a list")]
     [(null? lst)  str]
-    [else  (trim (string-trim str (car lst) #:repeat? #t) (cdr lst))]
+    [else  (remove-strings (string-remove str (car lst)) (cdr lst))]
     )
   )
 
@@ -23,15 +29,19 @@
 ;; - \r for Mac
 ;; - \r\n for NT
 
-(define (remove-newlines str)
-  (trim str '("\r\n" "\n" "\r"))
+(define/contract (remove-newlines str)
+  (-> string? string?)
+  (remove-strings str '("\r\n" "\n" "\r"))
   )
 
 
 (module+ test
   (require rackunit)
 
-  (check-equal?  (remove-newlines "\nzzz\n")  "zzz")
-  (check-equal?  (remove-newlines "\r\nzzz\r\n")  "zzz")
-  (check-equal?  (remove-newlines "\rzzz\r")  "zzz")
+  (check-equal?  (remove-strings "1.123.124.125" '("1" "12"))  ".23.24.25")
+  (check-equal?  (remove-strings "1.123.124.125" '("12" "1"))  ".3.4.5")
+
+  (check-equal?  (remove-newlines "\nzz\nz\n")  "zzz")
+  (check-equal?  (remove-newlines "\r\nzz\r\nz\r\n")  "zzz")
+  (check-equal?  (remove-newlines "\rzz\rz\r")  "zzz")
   )
