@@ -12,7 +12,7 @@
 (provide (all-defined-out))
 
 
-(define (basename str)
-  (-> string? string?)
+(define/contract (basename str)
+  (-> path-string? string?)
   (last (string-split str "/"))
   )
