@@ -24,14 +24,14 @@
 ;; - \r\n for NT
 
 (define (remove-newlines str)
-  (trim str '("\n" "\r"))
+  (trim str '("\r\n" "\n" "\r"))
   )
 
 
 (module+ test
   (require rackunit)
 
-  (check-equal?  (remove-newlines "zzz\n")  "zzz")
-  (check-equal?  (remove-newlines "zzz\r\n")  "zzz")
-  (check-equal?  (remove-newlines "zzz\r")  "zzz")
+  (check-equal?  (remove-newlines "\nzzz\n")  "zzz")
+  (check-equal?  (remove-newlines "\r\nzzz\r\n")  "zzz")
+  (check-equal?  (remove-newlines "\rzzz\r")  "zzz")
   )
