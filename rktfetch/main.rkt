@@ -8,9 +8,13 @@
  (only-in racket/format ~a)
  (only-in racket/list make-list)
  (only-in racket/os gethostname)
- (only-in racket/string string-join)
+ (only-in racket/string
+          string-contains?
+          string-join
+          )
  "private/get.rkt"
  "private/logo.rkt"
+ "private/get/helpers/string.rkt"
  )
 
 
@@ -23,6 +27,29 @@
 ;; Terminal
 ;; Uptime -- BSD
 
+
+(define (get-logo os distro)
+  (let
+      (
+       [dist (string-remove (string-downcase distro) "linux")]
+       ;; initial logo
+       [logo (if (string-contains? distro "linux")
+                 (hash-ref system-logos "linux")
+                 (case os
+                   (("unix")    (hash-ref system-logos "unix"))
+                   (("windows") (hash-ref system-logos "windows"))
+                   (else        (hash-ref system-logos "other"))
+                   )
+                 )]
+       )
+    (for ([i (hash-keys system-logos)])
+      (when (string-contains? dist i)
+        (set! logo (hash-ref system-logos i))
+        )
+      )
+    logo
+    )
+  )
 
 (define (>- val num1 num2)
   "Return no less than VAL from difference between NUM1 and NUM2."
@@ -51,9 +78,7 @@
        [memory  (get-memory os)]
        [pkg     (get-pkg    os)]
        [uptime  (get-uptime os)]
-       [logo
-        (hash-ref system-logos os)
-        ]
+       [logo    (get-logo   os distro)]
        [info
         (list
          (string-append user   "@"  host   )
