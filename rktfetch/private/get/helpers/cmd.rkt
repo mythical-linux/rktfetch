@@ -19,3 +19,14 @@
    (with-output-to-string (lambda () (system command)))
    )
   )
+
+
+(module+ test
+  (require rackunit)
+  (case (system-type)
+    [(unix)     (check-not-false (cmd->flat-str "ls"))]
+    [(windows)  (check-not-false (cmd->flat-str "dir"))]
+    )
+  ;; CONSIDER: Do all systems have echo?
+  (check-equal?  (cmd->flat-str "echo ok")  "ok")
+  )
