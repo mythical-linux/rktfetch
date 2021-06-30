@@ -1,6 +1,11 @@
-on: [push, pull_request]
+---
+
 
 name: CI
+
+
+on: [push, pull_request]
+
 
 jobs:
   build:
@@ -21,14 +26,14 @@ jobs:
           variant: ${{ matrix.racket-variant }}
           version: ${{ matrix.racket-version }}
 
-      - name: Installing
+      - name: Install
         run: make install
 
-      - name: Compiling and building docs
+      - name: Setup
         run: make setup
 
-      - name: Testing
+      - name: Test
         run: make test
 
-      - name: Test run
+      - name: Run
         run: make compile run
