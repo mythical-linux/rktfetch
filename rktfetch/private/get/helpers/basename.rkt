@@ -12,7 +12,15 @@
 (provide (all-defined-out))
 
 
-(define/contract (basename str)
+(define/contract (basename path-str)
   (-> path-string? string?)
-  (last (string-split str "/"))
+  (path->string (last (explode-path path-str)))
+  )
+
+
+(module+ test
+  (require rackunit)
+  (check-equal?  (basename "/")  "/")
+  (check-equal?  (basename "/a")  "a")
+  (check-equal?  (basename "/a/s/d")  "d")
   )
