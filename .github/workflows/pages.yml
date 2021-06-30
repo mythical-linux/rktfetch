@@ -1,0 +1,37 @@
+---
+
+
+name: Pages
+
+
+on:
+  push:
+    branches: [ master ]
+    paths:
+      - '**.scrbl'
+      - '**pages.yml'
+
+
+jobs:
+  build:
+    name: Build and publish to GitHub Pages
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: Bogdanp/setup-racket@v0.12
+        with:
+          architecture: x64
+          distribution: full
+          variant: CS
+          version: current
+
+      - name: Build docs
+        run: make install docs-html
+
+      - name: Publish
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: doc
+          publish_branch: pages
