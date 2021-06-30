@@ -78,6 +78,9 @@
        [memory  (make-parameter (get-memory (os)))]
        [pkg     (make-parameter (get-pkg    (os)))]
        [uptime  (make-parameter (get-uptime (os)))]
+       ;; additional CLI switches
+       [do-logo (make-parameter #t)]
+       [spacing (make-parameter "  ")]
        )
     (command-line
      #:program "RKTFetch"
@@ -100,11 +103,14 @@
      [("--memeory") arg "Force specified RAM amount"             (memory  arg)]
      [("--pkg"    ) arg "Force specified packages count"         (pkg     arg)]
      [("--uptime" ) arg "Force specified uptime"                 (uptime  arg)]
+     [("--no-logo")     "Don't display the logo"                 (do-logo  #f)]
+     [("--spacing") arg "Space between logo and info"
+                    (spacing (make-string (string->number arg) #\space))]
      )
     (let*
         (
          ;; pick logo        (left side)
-         [logo    (get-logo   (os) (distro))]
+         [logo  (if (do-logo)  (get-logo (os) (distro))  '(""))]
          ;; create info side (right side)
          [info
           (list
@@ -138,8 +144,8 @@
           (map
            (lambda (left right)
              (string-append
-              (~a left #:min-width logo-longest-size) "  " right
-              ;;  ^ left element   ^ alignment   spacing ^ ^ right element
+              (~a left #:min-width logo-longest-size) (spacing) right
+              ;;  ^ left element   ^ alignment        ^ spacing ^ right element
               )
              )
            logo-side info-side
