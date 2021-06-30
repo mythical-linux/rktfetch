@@ -1,13 +1,17 @@
 on: [push, pull_request]
+
 name: CI
+
 jobs:
   build:
     name: "Build on Racket '${{ matrix.racket-version }}' (${{ matrix.racket-variant }})"
     runs-on: ubuntu-latest
     strategy:
+
       matrix:
-        racket-version: ["stable", "current"]
+        racket-version: ["current"]
         racket-variant: ["BC", "CS"]
+
     steps:
       - uses: actions/checkout@v2
       - uses: Bogdanp/setup-racket@v1.4
@@ -16,9 +20,15 @@ jobs:
           distribution: full
           variant: ${{ matrix.racket-variant }}
           version: ${{ matrix.racket-version }}
-      - name: Installing rktfetch and its dependencies
-        run: raco pkg install --no-docs --auto --name rktfetch
-      - name: Compiling rktfetch and building its docs
-        run: raco setup --check-pkg-deps --unused-pkg-deps rktfetch
-      - name: Testing rktfetch
-        run: raco test -x -p rktfetch
+
+      - name: Installing
+        run: make install
+
+      - name: Compiling and building docs
+        run: make setup
+
+      - name: Testing
+        run: make test
+
+      - name: Test run
+        run: make compile run
