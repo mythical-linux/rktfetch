@@ -15,7 +15,7 @@ RKTFetch is a system fetch program in Racket.
 It is heavily inspired by @exec{neofetch}
 
 
-@section{rbulkresizer executable}
+@section{rktfetch executable}
 
 @commandline{rktfetch}
 
