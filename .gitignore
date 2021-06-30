@@ -1,3 +1,6 @@
+# -*- conf -*-
+
+
 *.dep
 *.exe
 *.tar.gz
@@ -7,9 +10,10 @@
 *~
 .DS_Store
 .\#*
-doc/
 \#*
+bin/
 compiled/
+doc/
 
 # Vim swap files
 [._]*.s[a-v][a-z]
