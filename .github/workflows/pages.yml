@@ -26,8 +26,11 @@ jobs:
           variant: CS
           version: current
 
+      - name: Install
+        run: make install
+
       - name: Build docs
-        run: make install docs-html
+        run: make docs-html
 
       - name: Publish
         uses: peaceiris/actions-gh-pages@v3
