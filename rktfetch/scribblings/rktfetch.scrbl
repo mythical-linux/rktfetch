@@ -26,3 +26,5 @@ It is heavily inspired by @exec{neofetch}
 
 Requiring the module is unnecessary, it is reccomended to run
 @exec{rktfetch} via it's launcher instead.
+
+But it can also be executed with @exec{racket -l rktfetch}
