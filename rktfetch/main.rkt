@@ -14,7 +14,7 @@
           )
  "private/get.rkt"
  "private/logo.rkt"
- "private/get/helpers/string.rkt"
+ (only-in "private/get/helpers/string.rkt" string-remove)
  )
 
 
