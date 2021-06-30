@@ -1,22 +1,29 @@
 PACKAGE-NAME		:= $(shell basename $(abspath .))
-PACKAGE-EXE			:= $(PACKAGE-NAME).exe
-PACKAGE-DIST		:= $(PACKAGE-NAME)_distribution
-PACKAGE-DIST-TAR	:= $(PACKAGE-DIST).tar.gz
+PACKAGE-EXE			:= $(PACKAGE-NAME)
+PACKAGE-BIN-DIR		:= ./bin
+PACKAGE-DOC-DIR		:= ./doc
+PACKAGE-SCRBL		:= $(PACKAGE-NAME)/scribblings/$(PACKAGE-NAME).scrbl
+PACKAGE-BIN			:= $(PACKAGE-BIN-DIR)/$(PACKAGE-EXE)
 PACKAGE-ZIP			:= $(PACKAGE-NAME).zip
 
+LN					:= ln -fs
+MKDIR				:= mkdir -p
 RACKET				:= racket
 RACO				:= raco
+SCRBL				:= $(RACO) scribble
 
 ENTRYPOINT			:= $(PACKAGE-NAME)/main.rkt
 COMPILE-FLAGS		:= -v
 RUN-FLAGS			:=
-EXE-FLAGS			:= -v -o $(PACKAGE-EXE)
+SCRBL-FLAGS			:= --dest $(PACKAGE-DOC-DIR) ++main-xref-in
+EXE-FLAGS			:= --orig-exe -v -o $(PACKAGE-BIN)
 DO-DOCS				:= --no-docs
 INSTALL-FLAGS		:= --auto $(DO-DOCS)
 DEPS-FLAGS			:= --check-pkg-deps --unused-pkg-deps
+TEST-FLAGS			:= --heartbeat --no-run-if-absent --submodule test --table
 
 
-all:	install setup test
+all:				install setup test
 
 compile:
 	$(RACO) make $(COMPILE-FLAGS) $(ENTRYPOINT)
@@ -24,35 +31,64 @@ compile:
 run:
 	$(RACKET) $(RUN-FLAGS) $(ENTRYPOINT)
 
-exe:	compile
-	$(RACO) exe $(EXE-FLAGS) $(ENTRYPOINT)
-
 install:
 	$(RACO) pkg install $(INSTALL-FLAGS) --name $(PACKAGE-NAME)
 
-dist:	exe
-	mkdir -p $(PACKAGE-DIST)
-	$(RACO) distribute $(PACKAGE-DIST) $(PACKAGE-EXE)
-	tar cfz $(PACKAGE-DIST-TAR) $(PACKAGE-DIST)
 
-pkg:
+# Documentation
+# WARNING: package has to be installed first
+
+docs-dir:
+	$(MKDIR) $(PACKAGE-DOC-DIR)
+
+docs-html:			docs-dir
+	$(SCRBL) --html $(SCRBL-FLAGS) $(PACKAGE-SCRBL)
+	$(LN) ../$(PACKAGE-DOC-DIR)/$(PACKAGE-NAME).html $(PACKAGE-DOC-DIR)/index.html
+
+docs-latex:			docs-dir
+	$(SCRBL) --latex $(SCRBL-FLAGS) $(PACKAGE-SCRBL)
+
+docs-markdown:		docs-dir
+	$(SCRBL) --markdown $(SCRBL-FLAGS) $(PACKAGE-SCRBL)
+
+docs-text:			docs-dir
+	$(SCRBL) --text $(SCRBL-FLAGS) $(PACKAGE-SCRBL)
+
+docs:				docs-html	docs-latex	docs-markdown	docs-text
+
+
+# Distribution
+
+exe:				compile
+	$(MKDIR) ./bin
+	$(RACO) exe $(EXE-FLAGS) $(ENTRYPOINT)
+
+# Source only
+pkg:				clean
 	$(RACO) pkg create --source $(PWD)
 
+
+# Removal
+
 distclean:
-	if [ -d $(PACKAGE-DIST) ] ; then rm -r $(PACKAGE-DIST) ; fi
-	if [ -f $(PACKAGE-DIST-TAR) ] ; then rm $(PACKAGE-DIST-TAR) ; fi
+	if [ -d $(PACKAGE-BIN-DIR) ] ; then rm -r $(PACKAGE-BIN-DIR) ; fi
 	if [ -f $(PACKAGE-ZIP) ] ; then rm $(PACKAGE-ZIP)* ; fi
 
-clean:	distclean
+clean:				distclean
 	find . -depth -type d -name 'compiled' -exec rm -r {} \;
-	if [ -f $(PACKAGE-EXE) ] ; then rm $(PACKAGE-EXE) ; fi
+	find . -depth -type d -name 'doc'      -exec rm -r {} \;
 
 remove:
 	$(RACO) pkg remove $(DO-DOCS) $(PACKAGE-NAME)
 
-purge:	remove clean
+purge:				remove clean
 
-reinstall:	remove install
+reinstall:			remove install
+
+resetup:			reinstall setup
+
+
+# Tests
 
 # This builds docs
 setup:
@@ -61,5 +97,15 @@ setup:
 check-deps:
 	$(RACO) setup $(DO-DOCS) $(DEPS-FLAGS) $(PACKAGE-NAME)
 
+test-local:
+	$(RACO) test $(TEST-FLAGS) ./$(PACKAGE-NAME)
+
 test:
-	$(RACO) test --package $(PACKAGE-NAME)
+	$(RACO) test $(TEST-FLAGS) --package $(PACKAGE-NAME)
+
+
+# Everything
+
+everything-test:	clean compile install setup check-deps test purge
+
+everything-dist:	pkg exe
