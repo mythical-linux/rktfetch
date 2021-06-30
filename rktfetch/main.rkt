@@ -78,22 +78,18 @@
        [logo-longest-size
         (string-length (car (sort logo #:key string-length >)))
         ]
-       [output
-        (string-join
-         (map
-          (lambda (left right)
-            (string-append
-             (~a left #:min-width (- logo-longest-size (string-length left)))
-             "  " right
-             "\n"
-             )
+       [output-lst
+        (map
+         (lambda (left right)
+           (string-append
+            (~a left #:min-width (- logo-longest-size (string-length left)))
+            "  " right
             )
-          logo-side info-side
-          )
-         ""
+           )
+         logo-side info-side
          )
         ]
        )
-    (display output)
+    (displayln (string-join output-lst "\n"))
     )
   )
