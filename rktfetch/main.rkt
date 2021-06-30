@@ -62,9 +62,9 @@
 
 
 (module+ main
-  ;; Gather info and output
   (let*
       (
+       ;; Gather info
        [cpu     (get-cpu)]
        [desktop (get-desktop)]
        [device  (get-device)]
@@ -78,7 +78,9 @@
        [memory  (get-memory os)]
        [pkg     (get-pkg    os)]
        [uptime  (get-uptime os)]
+       ;; pick logo        (left side)
        [logo    (get-logo   os distro)]
+       ;; create info side (right side)
        [info
         (list
          (string-append user   "@"  host   )
@@ -94,12 +96,16 @@
          (string-append "UPTIME:  " uptime )
          )
         ]
+       ;; extend the length of logo side to the length of info side
        [logo-side
         (append logo (make-list (>- 0 (length info) (length logo)) ""))
         ]
+       ;; extend the length of info side to the length of logo side
        [info-side
         (append info (make-list (>- 0 (length logo) (length info)) ""))
         ]
+       ;; length of the longest string in the logo,
+       ;; used to align the text in output-lst
        [logo-longest-size
         (string-length (car (sort logo #:key string-length >)))
         ]
@@ -108,12 +114,14 @@
          (lambda (left right)
            (string-append
             (~a left #:min-width logo-longest-size) "  " right
+            ;;  ^ left element   ^ alignment   spacing ^ ^ right element
             )
            )
          logo-side info-side
          )
         ]
        )
+    ;; Output
     (displayln (string-join output-lst "\n"))
     )
   )
