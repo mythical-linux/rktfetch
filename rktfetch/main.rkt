@@ -78,7 +78,7 @@
        [memory  (make-parameter (get-memory (os)))]
        [pkg     (make-parameter (get-pkg    (os)))]
        [uptime  (make-parameter (get-uptime (os)))]
-       ;; additional CLI switches
+       ;; additional CLI parameters
        [do-logo (make-parameter #t)]
        [spacing (make-parameter "  ")]
        )
@@ -89,23 +89,25 @@
      "among others: XGQT, Phate6660 & DrownNotably"
      "Released into the Public Domain"
      "Upstream: https://github.com/mythical-linux/rktfetch"
-     #:multi
-     [("--cpu"    ) arg "Force specified CPU"                    (cpu     arg)]
-     [("--desktop") arg "Force specified desktop"                (desktop arg)]
-     [("--device" ) arg "Force specified device"                 (device  arg)]
-     [("--host"   ) arg "Force specified host"                   (host    arg)]
-     [("--os"     ) arg "Force specified operating system"       (os      arg)]
-     [("--shell"  ) arg "Force specified login shell"            (shell   arg)]
-     [("--user"   ) arg "Force specified user"                   (user    arg)]
-     [("--distro" ) arg "Force specified system distribution"    (distro  arg)]
-     [("--editor" ) arg "Force specified file editor"            (editor  arg)]
-     [("--kernel" ) arg "Force specified system kernel"          (kernel  arg)]
-     [("--memeory") arg "Force specified RAM amount"             (memory  arg)]
-     [("--pkg"    ) arg "Force specified packages count"         (pkg     arg)]
-     [("--uptime" ) arg "Force specified uptime"                 (uptime  arg)]
+     #:once-each
+     ;; overwrite a detected component
+     [("--cpu"    ) str "Force specified CPU"                    (cpu     str)]
+     [("--desktop") str "Force specified desktop"                (desktop str)]
+     [("--device" ) str "Force specified device"                 (device  str)]
+     [("--distro" ) str "Force specified system distribution"    (distro  str)]
+     [("--editor" ) str "Force specified file editor"            (editor  str)]
+     [("--host"   ) str "Force specified host"                   (host    str)]
+     [("--kernel" ) str "Force specified system kernel"          (kernel  str)]
+     [("--memeory") str "Force specified RAM amount"             (memory  str)]
+     [("--os"     ) str "Force specified operating system"       (os      str)]
+     [("--pkg"    ) str "Force specified packages count"         (pkg     str)]
+     [("--shell"  ) str "Force specified login shell"            (shell   str)]
+     [("--uptime" ) str "Force specified uptime"                 (uptime  str)]
+     [("--user"   ) str "Force specified user"                   (user    str)]
+     ;; additional CLI switches
      [("--no-logo")     "Don't display the logo"                 (do-logo  #f)]
-     [("--spacing") arg "Space between logo and info"
-                    (spacing (make-string (string->number arg) #\space))]
+     [("--spacing") num "Space between logo and info (natural number)"
+                    (spacing (make-string (string->number num) #\space))]
      )
     (let*
         (
