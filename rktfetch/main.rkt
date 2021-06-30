@@ -107,8 +107,7 @@
         (map
          (lambda (left right)
            (string-append
-            (~a left #:min-width (- logo-longest-size (string-length left)))
-            "  " right
+            (~a left #:min-width logo-longest-size) "  " right
             )
            )
          logo-side info-side
