@@ -18,16 +18,6 @@
  )
 
 
-;;; What we need:
-;; CPU -- BSD
-;; Device
-;; Kernel -- BSD
-;; Memory
-;; Packages
-;; Terminal
-;; Uptime -- BSD
-
-
 (define (get-logo os distro)
   (let
       (
