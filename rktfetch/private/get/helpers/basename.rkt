@@ -4,9 +4,11 @@
 #lang racket/base
 
 (require
- racket/contract
  (only-in racket/list last)
- (only-in racket/string string-split)
+ (only-in racket/contract
+          define/contract
+          ->
+          )
  )
 
 (provide (all-defined-out))
