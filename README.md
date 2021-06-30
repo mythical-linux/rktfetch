@@ -42,34 +42,17 @@ UPTIME:  2d 8h 8m
 
 ## TODO
 - CPU (parse `/proc/cpuinfo`)
-  + ~~Linux support (generic)~~
-  + ~~ARM Linux support~~
   + BSD support
-- ~~Device~~
-  + ~~read `/sys/devices/virtual/dmi/id/product_name`~~
-  + ~~then fallback to `/sys/firmware/devicetree/base/model`~~
+- Device on Windows
 - ~~Distro~~
-  + ~~parse `/bedrock/etc/os-release`~~
-  + ~~then fallback to `/etc/os-release`~~
-  + ~~then fallback to `/var/lib/os-release`~~
 - DE/WM (split the current WM output into an array delimited by spaces and take the last element)
-- ~~Editor (get the contents of the `$EDITOR` environmental variable)~~
+- ~~Editor~~
 - Memory (parse `/proc/meminfo`)
   + Used/Total
   + ~~Linux support~~
   + BSD support
 - Music Info (MPD)
-- Packages
-  + apk
-  + dnf
-  + dpkg
-  + pkg
-  + rpm
-  + pacman
-  + portage (*DON'T USE QLIST*, we should be able to use pure Racket code for this)
-  + xbps
-  + yum
-  + zypper
+- ~~Packages~~
 - Terminal
   + parse the `/proc/?/status` of the current PID
   + use it to find the PPID, parse the status of that
