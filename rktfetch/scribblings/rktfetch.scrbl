@@ -23,11 +23,6 @@ RKTFetch is a system fetch program in Racket.
 It is heavily inspired by @exec{neofetch}
 
 
-@section{rktfetch executable}
-
-@commandline{rktfetch}
-
-
 @section{Requiring the rktfetch module}
 
 @defmodule[rktfetch]
@@ -38,7 +33,14 @@ Requiring the module is unnecessary, it is reccomended to run
 But it can also be executed with @exec{racket -l rktfetch}
 
 
-@section{Command-line interface}
+@section{rktfetch executable}
+
+@commandline{rktfetch}
+
+
+@subsection{Command-line interface}
+
+The list of supported command-line options:
 
 @itemlist[
           @item{
