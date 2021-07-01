@@ -4,8 +4,8 @@
 #lang racket/base
 
 (require
- racket/contract
  (only-in racket/string string-replace)
+ (only-in racket/contract define/contract -> listof)
  )
 
 (provide (all-defined-out))

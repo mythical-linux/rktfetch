@@ -4,9 +4,9 @@
 #lang racket/base
 
 (require
- racket/contract
  (only-in racket/port with-output-to-string)
  (only-in racket/system system)
+ (only-in racket/contract define/contract ->)
  (only-in "string.rkt" remove-newlines)
  )
 

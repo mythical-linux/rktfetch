@@ -6,10 +6,7 @@
 (require
  (only-in racket/format ~a)
  (only-in racket/string string-join)
- (only-in racket/contract
-          define/contract
-          ->
-          )
+ (only-in racket/contract define/contract ->)
  )
 
 (provide (all-defined-out))

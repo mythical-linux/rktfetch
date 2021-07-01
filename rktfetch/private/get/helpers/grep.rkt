@@ -4,9 +4,9 @@
 #lang racket/base
 
 (require
- racket/contract
  (only-in racket/file file->lines)
  (only-in racket/string string-contains?)
+ (only-in racket/contract define/contract -> ->*)
  (only-in racket/list
           empty?
           first

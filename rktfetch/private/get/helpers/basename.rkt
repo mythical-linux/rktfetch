@@ -5,10 +5,7 @@
 
 (require
  (only-in racket/list last)
- (only-in racket/contract
-          define/contract
-          ->
-          )
+ (only-in racket/contract define/contract ->)
  )
 
 (provide (all-defined-out))
