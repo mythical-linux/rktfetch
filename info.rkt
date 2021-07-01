@@ -3,7 +3,7 @@
 
 (define pkg-authors '(Mythical Linux))
 (define pkg-desc "System fetch program in Racket")
-(define version "0.0.0")
+(define version "1.0.0")
 
 (define collection 'multi)
 
