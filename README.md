@@ -3,8 +3,8 @@
 <p align="center">
     <a href="http://pkgs.racket-lang.org/package/rktfetch">
         <img src="https://img.shields.io/badge/raco_pkg_install-rktfetch-aa00ff.svg">
-    <a href="https://github.com/mythical-linux/rktfetch/actions/workflows/ci.yml">
-        <img src="https://github.com/mythical-linux/rktfetch/actions/workflows/ci.yml/badge.svg">
+    <a href="https://github.com/mythical-linux/rktfetch/actions/workflows/test.yml">
+        <img src="https://github.com/mythical-linux/rktfetch/actions/workflows/test.yml/badge.svg">
     </a>
 </p>
 
