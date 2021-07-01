@@ -41,8 +41,7 @@ UPTIME:  2d 8h 8m
 ```
 
 ## TODO
-- CPU (parse `/proc/cpuinfo`)
-  + BSD support
+- CPU on Windows
 - Device on Windows
 - ~~Distro~~
 - DE/WM (split the current WM output into an array delimited by spaces and take the last element)

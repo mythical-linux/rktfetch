@@ -55,13 +55,13 @@
   (let*
       (
        ;; Gather info
-       [cpu     (make-parameter (get-cpu))]
        [desktop (make-parameter (get-desktop))]
        [device  (make-parameter (get-device))]
        [host    (make-parameter (gethostname))]
        [os      (make-parameter (get-os))]
        [shell   (make-parameter (get-shell))]
        [user    (make-parameter (get-user))]
+       [cpu     (make-parameter (get-cpu    (os)))]
        [distro  (make-parameter (get-distro (os)))]
        [editor  (make-parameter (get-editor (os)))]
        [kernel  (make-parameter (get-kernel (os)))]
