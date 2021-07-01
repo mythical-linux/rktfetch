@@ -1,23 +1,43 @@
 ---
 
 
-image: debian:testing-20210208
-
+variables:
+  GIT_SUBMODULE_STRATEGY: recursive
+  TERM: dumb
 
 stages:
   - test
+  - pages
 
+
+image: debian:testing-20210208
 
 before_script:
   - apt-get update
-  - apt-get install -y make racket sqlite3
+  - apt-get install -y racket sqlite3
+
+  - make compile install
+
 
 test:
   stage: test
+
   script:
-    - make compile
-    - make run
-    - make install
     - make setup
     - make check-deps
     - make test
+    - make run
+
+
+pages:
+  stage: pages
+  only:
+    - master
+
+  script:
+    - make docs
+    - mv doc public
+
+  artifacts:
+    paths:
+      - public
