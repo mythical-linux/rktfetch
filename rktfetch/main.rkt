@@ -88,7 +88,7 @@
      [("--editor" ) str "Force specified file editor"            (editor  str)]
      [("--host"   ) str "Force specified host"                   (host    str)]
      [("--kernel" ) str "Force specified system kernel"          (kernel  str)]
-     [("--memeory") str "Force specified RAM amount"             (memory  str)]
+     [("--memory" ) str "Force specified RAM amount"             (memory  str)]
      [("--os"     ) str "Force specified operating system"       (os      str)]
      [("--pkg"    ) str "Force specified packages count"         (pkg     str)]
      [("--shell"  ) str "Force specified login shell"            (shell   str)]
