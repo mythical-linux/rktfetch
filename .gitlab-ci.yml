@@ -14,7 +14,7 @@ image: debian:testing-20210208
 
 before_script:
   - apt-get update
-  - apt-get install -y racket sqlite3
+  - apt-get install -y make racket sqlite3
 
   - make compile install
 
