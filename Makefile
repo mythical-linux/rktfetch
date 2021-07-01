@@ -43,7 +43,7 @@ docs-dir:
 
 docs-html:			docs-dir
 	$(SCRBL) --html $(SCRBL-FLAGS) $(PACKAGE-SCRBL)
-	$(LN) ../$(PACKAGE-DOC-DIR)/$(PACKAGE-NAME).html $(PACKAGE-DOC-DIR)/index.html
+	cd $(PACKAGE-DOC-DIR) && $(LN) $(PACKAGE-NAME).html index.html
 
 docs-latex:			docs-dir
 	$(SCRBL) --latex $(SCRBL-FLAGS) $(PACKAGE-SCRBL)
