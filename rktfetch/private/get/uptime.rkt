@@ -5,29 +5,27 @@
 
 
 (require
- (only-in racket/file file->string)
- (only-in racket/string string-split)
  "helpers/cmd.rkt"
- "helpers/string.rkt"
  "helpers/time.rkt"
+ (only-in "helpers/grep.rkt" first-line)
+ (only-in "helpers/is.rkt" file-is?)
+ (only-in "helpers/separator.rkt" string->separated-before)
  )
 
 (provide get-uptime)
 
 
 (define (get-uptime-unix)
-  (let
-      ([linux-uptime-file "/proc/uptime"])
-    (cond
-      [(file-exists? linux-uptime-file)
-       (seconds->time-str
-        (string->number
-         (car (string-split (remove-newlines (file->string linux-uptime-file)) "." #:trim? #t))
-         )
-        )
-       ]
-      [(cmd->flat-str "uptime -p")]
-      )
+  (cond
+    [(file-is? "/proc/uptime")
+     => (lambda (f)
+          (seconds->time-str
+           ;; WORKAROUND: by picking "." as separator we discard fractional part
+           (string->number (string->separated-before (first-line f) "."))
+           )
+          )
+     ]
+    [(cmd->flat-str "uptime -p")]
     )
   )
 
