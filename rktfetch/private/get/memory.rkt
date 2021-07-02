@@ -5,7 +5,7 @@
 
 
 (require
- (only-in "helpers/grep.rkt" grep-first->str)
+ (only-in "helpers/grep.rkt" grep-first)
  (only-in "helpers/is.rkt" file-is?)
  (only-in "helpers/separator.rkt" string->separated-after)
  (only-in "helpers/string.rkt" remove-strings)
@@ -27,10 +27,10 @@
      => (lambda (f)
           (let* (
                  [MemTotal
-                  (string->memory (grep-first->str "MemTotal" f))
+                  (string->memory (grep-first "MemTotal" f))
                   ]
                  [MemFree
-                  (string->memory (grep-first->str "MemFree" f))
+                  (string->memory (grep-first "MemFree" f))
                   ]
                  ;; includes cache, that's why it's so high
                  [MemUsed

@@ -38,7 +38,7 @@
     )
   )
 
-(define/contract (grep-first->str str file-name)
+(define/contract (grep-first str file-name)
   (-> string? path-string? string?)
   (let*
       ([grep-list (grep str file-name #:first-hit #t)])
@@ -49,9 +49,13 @@
     )
   )
 
+(define (first-line path)
+  (grep-first "" path)
+  )
+
 
 (module+ test
   (require rackunit)
-
-  (check-equal?  (grep-first->str "lang" "./grep.rkt")  "#lang racket/base")
+  (check-equal?  (grep-first "lang" "./grep.rkt")  "#lang racket/base")
+  (check-equal?  (first-line "./grep.rkt")  "#!/usr/bin/env racket")
   )

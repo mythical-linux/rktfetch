@@ -4,11 +4,11 @@
 #lang racket/base
 
 (require
+ (only-in "helpers/grep.rkt" grep-first)
  (only-in racket/string
           string-replace
           string-trim
           )
- "helpers/grep.rkt"
  "helpers/cmd.rkt"
  )
 
@@ -29,7 +29,7 @@
           #:when (file-exists? l))
       (set! dist
         (string-replace (string-trim
-                         (grep-first->str "PRETTY_NAME=" l)
+                         (grep-first "PRETTY_NAME=" l)
                          "PRETTY_NAME=") "\"" "")
         )
       )

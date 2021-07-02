@@ -4,9 +4,9 @@
 #lang racket/base
 
 (require
- "helpers/grep.rkt"
  "helpers/is.rkt"
  "helpers/separator.rkt"
+ (only-in "helpers/grep.rkt" grep-first)
  )
 
 (provide get-cpu)
@@ -31,11 +31,11 @@
   (cond
     [(file-is? "/proc/cpuinfo")
      => (lambda (f) (validate-info-file
-                (string->separated-after (grep-first->str "model name" f)
+                (string->separated-after (grep-first "model name" f)
                                          ":") f))]
     [(file-is? "/var/run/dmesg.boot")
      => (lambda (f) (validate-info-file
-                (string->separated-after (grep-first->str "cpu0 at cpus0" f)
+                (string->separated-after (grep-first "cpu0 at cpus0" f)
                                          ":") f))]
     [else  "N/A (no file to gather CPU info)"]
     )
