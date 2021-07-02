@@ -4,38 +4,27 @@
 #lang racket/base
 
 (require
- (only-in "helpers/grep.rkt" grep-first)
- (only-in racket/string
-          string-replace
-          string-trim
-          )
  "helpers/cmd.rkt"
+ (only-in "helpers/grep.rkt" grep-first)
+ (only-in "helpers/is.rkt" file-is?)
+ (only-in "helpers/string.rkt" remove-strings)
  )
 
 (provide get-distro)
 
 
+(define (pretty-name path)
+  (remove-strings (grep-first "PRETTY_NAME=" path)
+                  '("PRETTY_NAME=" "\"" " "))
+  )
+
+
 (define (get-distro-unix)
-  (let
-      (
-       [os-release-list '(
-                          "/bedrock/etc/os-release"
-                          "/etc/os-release"
-                          "/var/lib/os-release"
-                          )]
-       [dist #f]
-       )
-    (for ([l os-release-list]
-          #:when (file-exists? l))
-      (set! dist
-        (string-replace (string-trim
-                         (grep-first "PRETTY_NAME=" l)
-                         "PRETTY_NAME=") "\"" "")
-        )
-      )
-    (or dist
-       "N/A (could not read '/bedrock/etc/os-release', '/etc/os-release', nor '/var/lib/os-release')"
-       )
+  (cond
+    [(file-is? "/bedrock/etc/os-release")  => pretty-name]
+    [(file-is? "/etc/os-release")          => pretty-name]
+    [(file-is? "/var/lib/os-release")      => pretty-name]
+    [else  "N/A (could not read your distro)"]
     )
   )
 
