@@ -22,11 +22,11 @@
 (provide
  (contract-out
   [get-desktop  (-> string?)]
-  [get-device   (-> string?)]
   [get-os       (-> string?)]
   [get-shell    (-> string?)]
   [get-user     (-> string?)]
   [get-cpu      (-> string? string?)]
+  [get-device   (-> string? string?)]
   [get-distro   (-> string? string?)]
   [get-editor   (-> string? string?)]
   [get-kernel   (-> string? string?)]
