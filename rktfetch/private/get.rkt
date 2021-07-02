@@ -4,13 +4,18 @@
 #lang racket/base
 
 (require
- (only-in racket/contract/base contract-out ->)
+ (only-in racket/contract/base
+          ->
+          contract-out
+          listof
+          )
  "get/cpu.rkt"
+ "get/desktop.rkt"
  "get/device.rkt"
  "get/distro.rkt"
  "get/editor.rkt"
- "get/desktop.rkt"
  "get/kernel.rkt"
+ "get/logo.rkt"
  "get/memory.rkt"
  "get/os.rkt"
  "get/pkg.rkt"
@@ -33,5 +38,6 @@
   [get-memory   (-> string? string?)]
   [get-pkg      (-> string? string?)]
   [get-uptime   (-> string? string?)]
+  [get-logo     (-> string? string? (listof string?))]
   )
  )

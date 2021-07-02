@@ -8,38 +8,10 @@
  (only-in racket/format ~a)
  (only-in racket/list make-list)
  (only-in racket/os gethostname)
- (only-in racket/string
-          string-contains?
-          string-join
-          )
+ (only-in racket/string string-join)
  "private/get.rkt"
- "private/logo.rkt"
- (only-in "private/get/helpers/string.rkt" string-remove)
  )
 
-
-(define (get-logo os distro)
-  (let
-      (
-       [dist (string-remove (string-downcase distro) "linux")]
-       ;; initial logo
-       [logo (if (string-contains? distro "linux")
-                 (hash-ref system-logos "linux")
-                 (case os
-                   (("unix")    (hash-ref system-logos "unix"))
-                   (("windows") (hash-ref system-logos "windows"))
-                   (else        (hash-ref system-logos "other"))
-                   )
-                 )]
-       )
-    (for ([i (hash-keys system-logos)])
-      (when (string-contains? dist i)
-        (set! logo (hash-ref system-logos i))
-        )
-      )
-    logo
-    )
-  )
 
 (define (>- val num1 num2)
   "Return no less than VAL from difference between NUM1 and NUM2."
