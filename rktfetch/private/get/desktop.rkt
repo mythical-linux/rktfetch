@@ -8,6 +8,7 @@
  (only-in racket/file file->lines)
  (only-in racket/list last)
  (only-in racket/string string-split)
+ (only-in "helpers/is.rkt" file-is?)
  )
 
 (provide get-desktop)
@@ -22,13 +23,16 @@
                        "/root/.xinitrc"
                        )
                    )]
-       [xinitrc-exists (file-exists? xinitrc)]
        )
     (cond
       [(getenv "XDG_DESKTOP_SESSION")]
       [(getenv "XDG_CURRENT_DESKTOP")]
       [(getenv "DESKTOP_SESSION")]
-      [xinitrc-exists (last (string-split (last (file->lines xinitrc)) " "))]
+      [(file-is? xinitrc)
+       => (lambda (f)
+            (last (string-split (last (file->lines xinitrc)) " "))
+            )
+       ]
       [else "N/A (could not read the specified env variables, nor could was parsing xinitrc possible)"])
     )
   )
