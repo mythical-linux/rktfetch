@@ -5,54 +5,52 @@
 
 
 (require
- (only-in racket/file file->lines)
- (only-in racket/list
-          first
-          second
-          )
- (only-in racket/string
-          string-split
-          string-trim
-          )
+ (only-in "helpers/grep.rkt" grep-first->str)
+ (only-in "helpers/is.rkt" file-is?)
+ (only-in "helpers/separator.rkt" string->separated-after)
+ (only-in "helpers/string.rkt" remove-strings)
  )
 
 (provide get-memory)
 
 
+(define (string->memory str)
+  (string->number
+   (remove-strings (string->separated-after str ":") '("kB" " "))
+   )
+  )
+
+
 (define (get-memory-unix)
-  (let
-      (
-       [linux-memory-file "/proc/meminfo"]
-       )
-    (cond
-      [(file-exists? linux-memory-file)
-       (let*
-           ;; "memory-string" can be #f if we have given a string where a number
-           ;; cannot be extracted to string->number
-           ;; which can happen sometimes when attempting to parse /proc/meminfo
-           ([memory-string (string->number
-                            (first (string-split
-                                    (string-trim
-                                     (second (string-split
-                                              (first (file->lines linux-memory-file))
-                                              ":"
-                                              ))
-                                     #:left? #t
-                                     )
-                                    " "
-                                    ))
-                            )
-                           ])
-         (if (number? memory-string)
-             (string-append (number->string (quotient memory-string 1024)) "MB")
-             "N/A (misformatted /proc/meminfo?)"
-             )
-         )
-       ]
-      [else "N/A (could not parse /proc/meminfo)"]
-      )
+  (cond
+    [(file-is? "/proc/meminfo")
+     => (lambda (f)
+          (let* (
+                 [MemTotal
+                  (string->memory (grep-first->str "MemTotal" f))
+                  ]
+                 [MemFree
+                  (string->memory (grep-first->str "MemFree" f))
+                  ]
+                 ;; includes cache, that's why it's so high
+                 [MemUsed
+                  (if (and MemTotal MemFree)  (- MemTotal MemFree)  #f)
+                  ]
+                 )
+            (if (number? MemUsed)
+                (string-append
+                 (number->string (quotient MemUsed  1024)) "MB" " / "
+                 (number->string (quotient MemTotal 1024)) "MB"
+                 )
+                "N/A (malformed /proc/meminfo?)"
+                )
+            )
+          )
+     ]
+    [else  "N/A"]
     )
   )
+
 
 (define (get-memory os)
   (case os
