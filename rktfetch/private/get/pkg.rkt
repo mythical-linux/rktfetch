@@ -5,13 +5,8 @@
 
 
 (require
- (only-in racket/file find-files)
  (only-in racket/format ~a)
- (only-in racket/string
-          string-contains?
-          string-join
-          )
- "helpers/basename.rkt"
+ (only-in racket/string string-join)
  "helpers/cmd.rkt"
  )
 
