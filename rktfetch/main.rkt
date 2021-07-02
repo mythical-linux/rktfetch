@@ -55,19 +55,19 @@
   (let*
       (
        ;; Gather info
-       [desktop (make-parameter (get-desktop))]
        [host    (make-parameter (gethostname))]
        [os      (make-parameter (get-os))]
        [shell   (make-parameter (get-shell))]
        [user    (make-parameter (get-user))]
-       [cpu     (make-parameter (get-cpu    (os)))]
-       [device  (make-parameter (get-device (os)))]
-       [distro  (make-parameter (get-distro (os)))]
-       [editor  (make-parameter (get-editor (os)))]
-       [kernel  (make-parameter (get-kernel (os)))]
-       [memory  (make-parameter (get-memory (os)))]
-       [pkg     (make-parameter (get-pkg    (os)))]
-       [uptime  (make-parameter (get-uptime (os)))]
+       [cpu     (make-parameter (get-cpu     (os)))]
+       [desktop (make-parameter (get-desktop (os)))]
+       [device  (make-parameter (get-device  (os)))]
+       [distro  (make-parameter (get-distro  (os)))]
+       [editor  (make-parameter (get-editor  (os)))]
+       [kernel  (make-parameter (get-kernel  (os)))]
+       [memory  (make-parameter (get-memory  (os)))]
+       [pkg     (make-parameter (get-pkg     (os)))]
+       [uptime  (make-parameter (get-uptime  (os)))]
        ;; additional CLI parameters
        [do-logo (make-parameter #t)]
        [spacing (make-parameter "  ")]

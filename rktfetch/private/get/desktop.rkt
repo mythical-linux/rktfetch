@@ -14,7 +14,7 @@
 (provide get-desktop)
 
 
-(define (get-desktop)
+(define (get-desktop-unix)
   (let*
       (
        [xinitrc (or (getenv "XINITRC")
@@ -33,6 +33,14 @@
             (last (string-split (last (file->lines xinitrc)) " "))
             )
        ]
-      [else "N/A (could not read the specified env variables, nor could was parsing xinitrc possible)"])
+      [else "N/A (could not get current desktop)"])
+    )
+  )
+
+
+(define (get-desktop os)
+  (case os
+    [("unix")  (get-desktop-unix)]
+    [else  "N/A (your OS isn't supported)"]
     )
   )
