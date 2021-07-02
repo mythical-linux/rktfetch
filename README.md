@@ -46,10 +46,7 @@ UPTIME:  2d 8h 8m
 - ~~Distro~~
 - DE/WM (split the current WM output into an array delimited by spaces and take the last element)
 - ~~Editor~~
-- Memory (parse `/proc/meminfo`)
-  + Used/Total
-  + ~~Linux support~~
-  + BSD support
+- ~~Memory~~
 - Music Info (MPD)
 - ~~Packages~~
 - Terminal
