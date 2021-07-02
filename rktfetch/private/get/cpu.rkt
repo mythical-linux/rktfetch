@@ -4,56 +4,40 @@
 #lang racket/base
 
 (require
- (only-in racket/string
-          non-empty-string?
-          string-split
-          string-trim
-          )
  "helpers/grep.rkt"
+ "helpers/is.rkt"
  "helpers/separator.rkt"
  )
 
 (provide get-cpu)
 
 
-(define (doesnt-provide-info str)
-  (string-append "N/A (file \"" str "\" doesn't provide required information)")
+(define (valid-info? str)
+  (is? str (lambda (s) (not (equal? s ""))))
+  )
+
+(define (validate-info-file info-str file-name)
+  (cond
+    [(valid-info? info-str)]
+    [else  (string-append
+            "N/A (file \"" file-name "\" doesn't provide required information)"
+            )
+           ]
+    )
   )
 
 
 (define (get-cpu-unix)
-  (let
-      (
-       [linux-info-file "/proc/cpuinfo"]
-       [bsd-dmesg-file  "/var/run/dmesg.boot"]
-       )
-    (cond
-      [(file-exists? linux-info-file)
-       (let*
-           (
-            [model-line (grep-first->str "model name" linux-info-file)]
-            [model-name (string->separated-after model-line ":")]
-            )
-         (cond
-           [(non-empty-string? model-name)  model-name]
-           [else (doesnt-provide-info linux-info-file)]
-           )
-         )
-       ]
-      [(file-exists? bsd-dmesg-file)
-       (let*
-           (
-            [model-line (grep-first->str "cpu0 at cpus0" bsd-dmesg-file)]
-            [model-name (string->separated-after model-line ":")]
-            )
-         (cond
-           [(non-empty-string? model-name)  model-name]
-           [else  (doesnt-provide-info bsd-dmesg-file)]
-           )
-         )
-       ]
-      [else "N/A (could not read /proc/cpuinfo)"]
-      )
+  (cond
+    [(file-is? "/proc/cpuinfo")
+     => (lambda (f) (validate-info-file
+                (string->separated-after (grep-first->str "model name" f)
+                                         ":") f))]
+    [(file-is? "/var/run/dmesg.boot")
+     => (lambda (f) (validate-info-file
+                (string->separated-after (grep-first->str "cpu0 at cpus0" f)
+                                         ":") f))]
+    [else  "N/A (no file to gather CPU info)"]
     )
   )
 
