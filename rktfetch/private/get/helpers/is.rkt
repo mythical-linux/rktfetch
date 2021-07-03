@@ -38,3 +38,13 @@
   (-> string? (or/c boolean? path-string?))
   (is? str non-empty-string?)
   )
+
+
+(module+ test
+  (require rackunit)
+  (check-eq?  (is? 'z symbol?)  'z)
+  (check-false  (is? 'z number?))
+  (check-equal?  (file-is? "is.rkt")  "is.rkt")
+  (check-equal?  (directory-is? (current-directory))  (current-directory))
+  (check-equal?  (nonempty-string-is? "zzz")  "zzz")
+  )
