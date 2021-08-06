@@ -1,7 +1,7 @@
 #lang info
 
 
-(define pkg-authors '(Mythical Linux))
+(define pkg-authors '(DrownNotably Phate6660 xgqt))
 (define pkg-desc "System fetch program in Racket")
 (define version "1.0.0")
 
@@ -10,12 +10,10 @@
 (define deps
   '(
     "base"
-    )
-  )
+    ))
 (define build-deps
   '(
     "racket-doc"
     "rackunit-lib"
     "scribble-lib"
-    )
-  )
+    ))
