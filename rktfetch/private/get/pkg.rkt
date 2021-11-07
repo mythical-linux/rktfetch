@@ -5,9 +5,10 @@
 
 
 (require
+ (only-in racket/port port->lines)
  (only-in racket/string string-join)
  (only-in racket/system process)
- (only-in racket/port port->lines)
+ (only-in pkg/lib installed-pkg-names)
  )
 
 (provide get-pkg)
@@ -30,6 +31,10 @@
           )
          ))
 
+(define (package-count-raco)
+  (length (installed-pkg-names #:scope 'user))
+  )
+
 
 (define pkg-managers
   (hash
@@ -40,6 +45,7 @@
    "nix-env"    (hash 'brand "Nix"      'counter (lambda () (cnt-out "nix-store -q --requisites ~/.nix-profile")))
    "pacman"     (hash 'brand "Pacman"   'counter (lambda () (cnt-out "pacman -Qq")))
    "pkg_info"   (hash 'brand "PKG"      'counter (lambda () (cnt-out "pkg_info")))
+   "raco"       (hash 'brand "Raco"     'counter package-count-raco)
    "rpm"        (hash 'brand "RPM"      'counter (lambda () (cnt-out "rpm -qa")))
    "xbps-query" (hash 'brand "XBPS"     'counter (lambda () (cnt-out "xbps-query -l")))
    ))
