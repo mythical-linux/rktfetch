@@ -4,11 +4,7 @@
 #lang racket/base
 
 (require
- (only-in racket/contract/base
-          ->
-          contract-out
-          listof
-          )
+ racket/contract/base
  "get/cpu.rkt"
  "get/desktop.rkt"
  "get/device.rkt"
