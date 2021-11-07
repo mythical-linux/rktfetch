@@ -21,26 +21,25 @@
 
 
 (module+ main
-  (let*
-      (
-       ;; Gather info
-       [host    (make-parameter (gethostname))]
-       [os      (make-parameter (get-os))]
-       [shell   (make-parameter (get-shell))]
-       [user    (make-parameter (get-user))]
-       [cpu     (make-parameter (get-cpu     (os)))]
-       [desktop (make-parameter (get-desktop (os)))]
-       [device  (make-parameter (get-device  (os)))]
-       [distro  (make-parameter (get-distro  (os)))]
-       [editor  (make-parameter (get-editor  (os)))]
-       [kernel  (make-parameter (get-kernel  (os)))]
-       [memory  (make-parameter (get-memory  (os)))]
-       [pkg     (make-parameter (get-pkg     (os)))]
-       [uptime  (make-parameter (get-uptime  (os)))]
-       ;; additional CLI parameters
-       [do-logo (make-parameter #t)]
-       [spacing (make-parameter "  ")]
-       )
+  (let* (
+         ;; Gather info
+         [host    (make-parameter (gethostname))]
+         [os      (make-parameter (get-os))]
+         [shell   (make-parameter (get-shell))]
+         [user    (make-parameter (get-user))]
+         [cpu     (make-parameter (get-cpu     (os)))]
+         [desktop (make-parameter (get-desktop (os)))]
+         [device  (make-parameter (get-device  (os)))]
+         [distro  (make-parameter (get-distro  (os)))]
+         [editor  (make-parameter (get-editor  (os)))]
+         [kernel  (make-parameter (get-kernel  (os)))]
+         [memory  (make-parameter (get-memory  (os)))]
+         [pkg     (make-parameter (get-pkg     (os)))]
+         [uptime  (make-parameter (get-uptime  (os)))]
+         ;; additional CLI parameters
+         [do-logo (make-parameter #t)]
+         [spacing (make-parameter "  ")]
+         )
     (command-line
      #:program "RKTFetch"
      #:ps
@@ -68,53 +67,48 @@
      [("--spacing") num "Space between logo and info (natural number)"
                     (spacing (make-string (string->number num) #\space))]
      )
-    (let*
-        (
-         ;; pick logo        (left side)
-         [logo  (if (do-logo)  (get-logo (os) (distro))  '(""))]
-         ;; create info side (right side)
-         [info
-          (list
-           (string-append (user)  "@" (host)   )
-           (string-append "CPU:     " (cpu)    )
-           (string-append "DESKTOP: " (desktop))
-           (string-append "DEVICE:  " (device) )
-           (string-append "DISTRO:  " (distro) )
-           (string-append "EDITOR:  " (editor) )
-           (string-append "KERNEL:  " (kernel) )
-           (string-append "PKGS:    " (pkg)    )
-           (string-append "MEMORY:  " (memory) )
-           (string-append "SHELL:   " (shell)  )
-           (string-append "UPTIME:  " (uptime) )
-           )
-          ]
-         ;; extend the length of logo side to the length of info side
-         [logo-side
-          (append logo (make-list (>0 (length info) (length logo)) ""))
-          ]
-         ;; extend the length of info side to the length of logo side
-         [info-side
-          (append info (make-list (>0 (length logo) (length info)) ""))
-          ]
-         ;; length of the longest string in the logo,
-         ;; used to align the text in output-lst
-         [logo-longest-size
-          (string-length (car (sort logo #:key string-length >)))
-          ]
-         [output-lst
-          (map
-           (lambda (left right)
-             (string-append
-              (~a left #:min-width logo-longest-size) (spacing) right
-              ;;  ^ left element   ^ alignment        ^ spacing ^ right element
-              )
+    (let* (
+           ;; pick logo        (left side)
+           [logo  (if (do-logo)  (get-logo (os) (distro))  '(""))]
+           ;; create info side (right side)
+           [info
+            (list
+             (string-append (user)  "@" (host)   )
+             (string-append "CPU:     " (cpu)    )
+             (string-append "DESKTOP: " (desktop))
+             (string-append "DEVICE:  " (device) )
+             (string-append "DISTRO:  " (distro) )
+             (string-append "EDITOR:  " (editor) )
+             (string-append "KERNEL:  " (kernel) )
+             (string-append "PKGS:    " (pkg)    )
+             (string-append "MEMORY:  " (memory) )
+             (string-append "SHELL:   " (shell)  )
+             (string-append "UPTIME:  " (uptime) )
              )
-           logo-side info-side
+            ]
+           ;; extend the length of logo side to the length of info side
+           [logo-side
+            (append logo (make-list (>0 (length info) (length logo)) ""))
+            ]
+           ;; extend the length of info side to the length of logo side
+           [info-side
+            (append info (make-list (>0 (length logo) (length info)) ""))
+            ]
+           ;; length of the longest string in the logo,
+           ;; used to align the text in output-lst
+           [logo-longest-size
+            (string-length (car (sort logo #:key string-length >)))]
+           [output-lst
+            (map
+             (lambda (left right)
+               (string-append
+                (~a left #:min-width logo-longest-size) (spacing) right
+                ;;  ^ left element   ^ alignment        ^ spacing ^ right element
+                ))
+             logo-side info-side
+             )]
            )
-          ]
-         )
       ;; Output
       (displayln (string-join output-lst "\n"))
       )
-    )
-  )
+    ))
