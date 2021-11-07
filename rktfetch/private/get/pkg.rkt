@@ -5,7 +5,6 @@
 
 
 (require
- (only-in racket/format ~a)
  (only-in racket/string string-join)
  "helpers/cmd.rkt"
  )
@@ -13,107 +12,52 @@
 (provide get-pkg)
 
 
-(define (get-pkgmanagers-unix)
-  (let
-      (
-       [all  '#hash(
-                    ["apk"        . "APK"]
-                    ["dpkg"       . "DPKG"]
-                    ["emerge"     . "Portage"]
-                    ["guix"       . "Guix"]
-                    ["nix-env"    . "Nix"]
-                    ["pacman"     . "Pacman"]
-                    ["pkg_info"   . "PKG"]
-                    ["rpm"        . "RPM"]
-                    ["xbps-query" . "XBPS"]
-                    )]
-       [found '()]
-       )
-    (hash-for-each
-     all
-     (lambda (k v)
-       (when (find-executable-path k)  (set! found (cons v found)))
-       )
-     )
-    found
-    )
-  )
-
 (define (cnt-out cmd)
-  (cmd->flat-str (~a cmd " | wc -l"))
+  (string->number (cmd->flat-str (format "~a | wc -l" cmd)))
   )
 
-(define (package-count-apk)
-  (cnt-out "apk info")
-  )
-
-(define (package-count-dpkg)
-  (cnt-out "dpkg-query -f '.\n' -W")
-  )
-
-(define (package-count-guix)
-  (cnt-out "guix package --list-installed")
-  )
-
-(define (package-count-nix)
-  (cnt-out "nix-store -q --requisites ~/.nix-profile")
-  )
-
-(define (package-count-pacman)
-  (cnt-out "pacman -Qq")
-  )
-
-(define (package-count-pkg)
-  (cnt-out "pkg_info")
-  )
 
 (define (package-count-portage)
-  (apply + (map
-            (λ (path)
-              (length (filter (lambda (subdir)
-                                (directory-exists? (build-path path subdir))
-                                )
-                              (directory-list path))))
-            (directory-list "/var/db/pkg" #:build? #t)
+  (apply +
+         (map
+          (λ (path)
+            (length (filter
+                     (lambda (subdir) (directory-exists? (build-path path subdir)))
+                     (directory-list path)))
             )
-         )
-  )
-
-(define (package-count-rpm)
-  (cnt-out "rpm -qa")
-  )
-
-(define (package-count-xbps)
-  (cnt-out "xbps-query -l")
-  )
-
-;; this is a very cool magic trick ;P
-(define ns (variable-reference->namespace (#%variable-reference)))
-
-(define-syntax-rule (package-count pm)
-  ((eval
-    (string->symbol (string-append "package-count-" (string-downcase pm)))
-    ns
-    ))
-  )
-
-(define (get-pkgmanager-unix)
-  (let
-      ([pms (get-pkgmanagers-unix)])
-    (if (null? pms)
-        "N/A (unknown package manager)"
-        (string-join
-         (map (lambda (pm) (~a pm " (" (package-count pm) ")")) pms)
-         ", "
-         )
-        )
-    )
-  )
+          (directory-list "/var/db/pkg" #:build? #t)
+          )
+         ))
 
 
-(define (get-pkg os)
-  (case os
-    [("unix")  (get-pkgmanager-unix)]
-    [else "N/A (your OS isn't supported)"]
-    )
+(define pkg-managers
+  (hash
+   "apk"        (hash 'brand "APK"      'counter (lambda () (cnt-out "apk info")))
+   "dpkg"       (hash 'brand "DPKG"     'counter (lambda () (cnt-out "dpkg-query -f '.\n' -W")))
+   "emerge"     (hash 'brand "Portage"  'counter package-count-portage)
+   "guix"       (hash 'brand "Guix"     'counter (lambda () (cnt-out "guix package --list-installed")))
+   "nix-env"    (hash 'brand "Nix"      'counter (lambda () (cnt-out "nix-store -q --requisites ~/.nix-profile")))
+   "pacman"     (hash 'brand "Pacman"   'counter (lambda () (cnt-out "pacman -Qq")))
+   "pkg_info"   (hash 'brand "PKG"      'counter (lambda () (cnt-out "pkg_info")))
+   "rpm"        (hash 'brand "RPM"      'counter (lambda () (cnt-out "rpm -qa")))
+   "xbps-query" (hash 'brand "XBPS"     'counter (lambda () (cnt-out "xbps-query -l")))
+   ))
+
+
+(define (get-pkg)
+  (string-join
+   (filter
+    string?
+    (hash-map
+     pkg-managers
+     (lambda (key val)
+       (if (find-executable-path key)
+           (let ([count ((hash-ref val 'counter))])
+             (if (> count 0)
+                 (format "~a (~a)" (hash-ref val 'brand) count)
+                 #f))
+           #f)
+       )
+     ))
+   ", ")
   )

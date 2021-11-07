@@ -46,7 +46,7 @@
          [editor  (make-parameter (delay/thread (get-editor  (os))))]
          [kernel  (make-parameter (delay/thread (get-kernel  (os))))]
          [memory  (make-parameter (delay/thread (get-memory  (os))))]
-         [pkg     (make-parameter (delay/thread (get-pkg     (os))))]
+         [pkg     (make-parameter (delay/thread (get-pkg         )))]
          [uptime  (make-parameter (delay/thread (get-uptime  (os))))]
          ;; additional CLI parameters
          [do-logo (make-parameter #t)]

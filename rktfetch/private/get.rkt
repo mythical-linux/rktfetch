@@ -32,7 +32,7 @@
   [get-editor   (-> string? string?)]
   [get-kernel   (-> string? string?)]
   [get-memory   (-> string? string?)]
-  [get-pkg      (-> string? string?)]
+  [get-pkg      (-> string?)]
   [get-uptime   (-> string? string?)]
   [get-logo     (-> string? string? (listof string?))]
   )
