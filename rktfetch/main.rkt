@@ -13,14 +13,11 @@
  )
 
 
-(define (>- val num1 num2)
-  "Return no less than VAL from difference between NUM1 and NUM2."
-  (let
-      ([res (- num1 num2)])
-    (if (> res val) res val
-        )
-    )
-  )
+;; Return no less 0 VAL from difference between NUM1 and NUM2
+(define (>0 num1 num2)
+  (let ([res (- num1 num2)])
+    (if (> res 0)  res  0)
+    ))
 
 
 (module+ main
@@ -93,11 +90,11 @@
           ]
          ;; extend the length of logo side to the length of info side
          [logo-side
-          (append logo (make-list (>- 0 (length info) (length logo)) ""))
+          (append logo (make-list (>0 (length info) (length logo)) ""))
           ]
          ;; extend the length of info side to the length of logo side
          [info-side
-          (append info (make-list (>- 0 (length logo) (length info)) ""))
+          (append info (make-list (>0 (length logo) (length info)) ""))
           ]
          ;; length of the longest string in the logo,
          ;; used to align the text in output-lst
