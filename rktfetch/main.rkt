@@ -5,6 +5,7 @@
 
 (require
  racket/cmdline
+ racket/promise
  (only-in racket/format ~a)
  (only-in racket/list make-list)
  (only-in racket/os gethostname)
@@ -19,23 +20,34 @@
     (if (> res 0)  res  0)
     ))
 
+;; peek takes a single argument PARAM-PROC which is a parameter;
+;; the content of PARAM-PROC is checked and if it is a promise,
+;; that promise is forced
+(define (peek param-proc)
+  (let ([content (param-proc)])
+    (if (promise? content)
+        (force content)
+        content
+        )
+    ))
+
 
 (module+ main
   (let* (
          ;; Gather info
          [host    (make-parameter (gethostname))]
          [os      (make-parameter (get-os))]
-         [shell   (make-parameter (get-shell))]
-         [user    (make-parameter (get-user))]
-         [cpu     (make-parameter (get-cpu     (os)))]
-         [desktop (make-parameter (get-desktop (os)))]
-         [device  (make-parameter (get-device  (os)))]
-         [distro  (make-parameter (get-distro  (os)))]
-         [editor  (make-parameter (get-editor  (os)))]
-         [kernel  (make-parameter (get-kernel  (os)))]
-         [memory  (make-parameter (get-memory  (os)))]
-         [pkg     (make-parameter (get-pkg     (os)))]
-         [uptime  (make-parameter (get-uptime  (os)))]
+         [shell   (make-parameter (delay/thread (get-shell)))]
+         [user    (make-parameter (delay/thread (get-user)))]
+         [cpu     (make-parameter (delay/thread (get-cpu     (os))))]
+         [desktop (make-parameter (delay/thread (get-desktop (os))))]
+         [device  (make-parameter (delay/thread (get-device  (os))))]
+         [distro  (make-parameter (delay/thread (get-distro  (os))))]
+         [editor  (make-parameter (delay/thread (get-editor  (os))))]
+         [kernel  (make-parameter (delay/thread (get-kernel  (os))))]
+         [memory  (make-parameter (delay/thread (get-memory  (os))))]
+         [pkg     (make-parameter (delay/thread (get-pkg     (os))))]
+         [uptime  (make-parameter (delay/thread (get-uptime  (os))))]
          ;; additional CLI parameters
          [do-logo (make-parameter #t)]
          [spacing (make-parameter "  ")]
@@ -69,31 +81,28 @@
      )
     (let* (
            ;; pick logo        (left side)
-           [logo  (if (do-logo)  (get-logo (os) (distro))  '(""))]
+           [logo  (if (do-logo)  (get-logo (os) (peek distro))  '(""))]
            ;; create info side (right side)
            [info
             (list
-             (string-append (user)  "@" (host)   )
-             (string-append "CPU:     " (cpu)    )
-             (string-append "DESKTOP: " (desktop))
-             (string-append "DEVICE:  " (device) )
-             (string-append "DISTRO:  " (distro) )
-             (string-append "EDITOR:  " (editor) )
-             (string-append "KERNEL:  " (kernel) )
-             (string-append "PKGS:    " (pkg)    )
-             (string-append "MEMORY:  " (memory) )
-             (string-append "SHELL:   " (shell)  )
-             (string-append "UPTIME:  " (uptime) )
-             )
-            ]
+             (string-append (peek user)  "@" (host))
+             (string-append "CPU:     " (peek cpu)    )
+             (string-append "DESKTOP: " (peek desktop))
+             (string-append "DEVICE:  " (peek device) )
+             (string-append "DISTRO:  " (peek distro) )
+             (string-append "EDITOR:  " (peek editor) )
+             (string-append "KERNEL:  " (peek kernel) )
+             (string-append "PKGS:    " (peek pkg)    )
+             (string-append "MEMORY:  " (peek memory) )
+             (string-append "SHELL:   " (peek shell)  )
+             (string-append "UPTIME:  " (peek uptime) )
+             )]
            ;; extend the length of logo side to the length of info side
            [logo-side
-            (append logo (make-list (>0 (length info) (length logo)) ""))
-            ]
+            (append logo (make-list (>0 (length info) (length logo)) ""))]
            ;; extend the length of info side to the length of logo side
            [info-side
-            (append info (make-list (>0 (length logo) (length info)) ""))
-            ]
+            (append info (make-list (>0 (length logo) (length info)) ""))]
            ;; length of the longest string in the logo,
            ;; used to align the text in output-lst
            [logo-longest-size
