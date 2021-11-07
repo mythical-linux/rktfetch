@@ -23,7 +23,7 @@ DEPS-FLAGS			:= --check-pkg-deps --unused-pkg-deps
 TEST-FLAGS			:= --heartbeat --no-run-if-absent --submodule test --table
 
 
-all:				install setup test
+all:				clean compile
 
 compile:
 	$(RACO) make $(COMPILE-FLAGS) $(ENTRYPOINT)
