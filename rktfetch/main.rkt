@@ -83,9 +83,11 @@
            ;; pick logo        (left side)
            [logo  (if (do-logo)  (get-logo (os) (peek distro))  '(""))]
            ;; create info side (right side)
+           [header  (string-append (peek user) "@" (host))]
            [info
             (list
-             (string-append (peek user)  "@" (host))
+             header
+             (make-string  (string-length header)  #\-)
              (string-append "CPU:     " (peek cpu)    )
              (string-append "DESKTOP: " (peek desktop))
              (string-append "DEVICE:  " (peek device) )
