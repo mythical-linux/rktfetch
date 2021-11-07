@@ -6,14 +6,15 @@
 
 (require
  (only-in racket/string string-join)
- "helpers/cmd.rkt"
+ (only-in racket/system process)
+ (only-in racket/port port->lines)
  )
 
 (provide get-pkg)
 
 
 (define (cnt-out cmd)
-  (string->number (cmd->flat-str (format "~a | wc -l" cmd)))
+  (length (port->lines (car (process cmd))))
   )
 
 
