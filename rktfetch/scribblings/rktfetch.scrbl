@@ -22,6 +22,9 @@
 RKTFetch is a system fetch program in Racket.
 It is heavily inspired by @exec{neofetch}
 
+Main git repository is available on GitHub:
+@link["https://github.com/mythical-linux/rktfetch" "mythical-linux/rktfetch"]
+
 
 @section{Requiring the rktfetch module}
 
