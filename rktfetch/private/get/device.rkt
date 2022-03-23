@@ -13,11 +13,11 @@
 
 (define (get-device-unix)
   (cond
-    [(file-is? "/sys/devices/virtual/dmi/id/product_name") => first-line]
-    [(file-is? "/sys/firmware/devicetree/base/model")      => first-line]
+    [(for/or ([f '("/sys/devices/virtual/dmi/id/product_name"
+                   "/sys/firmware/devicetree/base/model")])
+       (and (file-exists? f) (first-line f)))]
     [else  "N/A (could not get device)"]
-    )
-  )
+    ))
 
 
 (define (get-device os)
