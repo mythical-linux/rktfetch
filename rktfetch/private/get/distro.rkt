@@ -21,12 +21,13 @@
 
 (define (get-distro-unix)
   (cond
-    [(file-is? "/bedrock/etc/os-release")  => pretty-name]
-    [(file-is? "/etc/os-release")          => pretty-name]
-    [(file-is? "/var/lib/os-release")      => pretty-name]
+    [(for/or ([f '("/bedrock/etc/os-release"
+                   "/etc/os-release"
+                   "/usr/lib/os-release"
+                   "/var/lib/os-release")])
+       (and (file-exists? f) (pretty-name f)))]
     [else  "N/A (could not read your distro)"]
-    )
-  )
+    ))
 
 (define (get-distro-windows)
   (cmd->flat-str "ver")
