@@ -22,9 +22,10 @@
                          )
                      )])
     (cond
-      [(getenv "XDG_DESKTOP_SESSION")]
-      [(getenv "XDG_CURRENT_DESKTOP")]
-      [(getenv "DESKTOP_SESSION")]
+      [(for/or ([v '("XDG_DESKTOP_SESSION"
+                     "XDG_CURRENT_DESKTOP"
+                     "DESKTOP_SESSION")])
+         (getenv v))]
       [(file-is? xinitrc)
        => (lambda (f)
             (last (string-split (last (file->lines xinitrc)) " ")))]
