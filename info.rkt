@@ -5,7 +5,7 @@
 
 (define pkg-desc "System fetch program in Racket")
 
-(define version "1.0.0")
+(define version "1.0")
 
 (define license 'CC0-1.0)
 
